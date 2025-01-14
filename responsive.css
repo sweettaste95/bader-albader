@@ -28,37 +28,26 @@
 /* تنسيقات خاصة بالجوال */
 @media (max-width: 768px) {
     .manager-container {
-        max-width: 95%; /* تقليل العرض أكثر */
+        padding: 10px;
     }
 
     .manager-main-card {
-        max-width: 350px; /* تقليل الحد الأقصى للعرض */
+        max-width: 90%; /* تقليل العرض للجوال */
     }
 
     .manager-image {
-        width: 100px; /* تصغير الصورة */
+        width: 100px;
         height: 100px;
     }
 
-    .manager-name {
-        font-size: 1rem; /* تقليل حجم النص */
-    }
-
     .manager-stats-row {
-        flex-direction: column; /* ترتيب البطاقات بشكل عمودي */
+        flex-direction: row; /* جعل البطاقات في صف واحد */
+        justify-content: space-evenly; /* توزيع المسافات بالتساوي */
     }
 
     .stat-card {
-        padding: 10px; /* تقليل الحشو */
-    }
-
-    .navigation-buttons {
-        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
-        gap: 5px;
-    }
-
-    .navigation-buttons button {
-        font-size: 0.8rem; /* تصغير الأزرار */
-        padding: 8px;
+        flex: 1 1 45%; /* بطاقتان في كل صف على الجوال */
+        max-width: 100px; /* تقليل عرض البطاقة */
+        padding: 8px; /* تقليل الحشو */
     }
 }
