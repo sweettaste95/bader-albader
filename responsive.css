@@ -51,3 +51,55 @@
         padding: 8px; /* تقليل الحشو */
     }
 }
+
+/* =========================================================== */
+
+
+
+
+/* تنسيقات الجوال (الشاشات أقل من 768px) */
+@media (max-width: 768px) {
+    /* توسيط الجدول */
+    #team-stats-table,
+    #year-stats-table {
+        width: 100%; /* العرض الكامل للجوال */
+        margin: 0 auto; /* توسيط الجدول */
+        font-size: 12px; /* تصغير الخط لتناسب الجوال */
+    }
+
+    #team-stats-table th, #team-stats-table td,
+    #year-stats-table th, #year-stats-table td {
+        padding: 8px; /* تقليل المسافة داخل الخلايا */
+    }
+
+    /* توسيط البطاقات الرباعية */
+    .team-stats-container {
+        flex-wrap: wrap; /* السماح بالتفاف البطاقات */
+        justify-content: center; /* توسيط البطاقات */
+        gap: 10px; /* تقليل المسافات بين البطاقات */
+    }
+
+    .team-stat-card {
+        width: 45%; /* عرض كل بطاقة نصف الشاشة */
+        margin-bottom: 10px; /* مسافة بين البطاقات */
+    }
+
+    /* الأزرار (مثل الفلترة) */
+    .team-filter-btn {
+        font-size: 12px; /* تقليل حجم النص */
+        padding: 8px; /* تقليل الحشو */
+    }
+
+    /* تحسين عرض الجدولين */
+    #team-stats-table th, #team-stats-table td,
+    #year-stats-table th, #year-stats-table td {
+        word-wrap: break-word; /* كسر النصوص الطويلة */
+        text-align: center; /* توسيط النصوص داخل الجدول */
+    }
+
+    /* تحسين المسافات العلوية والسفلية */
+    .pagination-controls {
+        margin-top: 10px; /* تقليل المسافة العلوية */
+    }
+}
+
