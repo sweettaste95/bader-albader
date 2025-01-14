@@ -22,6 +22,12 @@
         height: 150px;
     }
 }
+ /* الحاوية الرئيسية */
+    #main-content {
+        padding: 10px; /* تقليل الحواف */
+        overflow-x: hidden; /* منع التمرير الأفقي */
+    }
+}
 
 /* =========================================================== */
 
@@ -55,51 +61,50 @@
 /* =========================================================== */
 
 
-
-
-/* تنسيقات الجوال (الشاشات أقل من 768px) */
 @media (max-width: 768px) {
-    /* توسيط الجدول */
+    /* الحاوية الرئيسية للبطاقات */
+    .team-stats-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* صفين، بطاقتان في كل صف */
+        gap: 15px; /* مسافة بين البطاقات */
+        justify-content: center; /* توسيط البطاقات */
+        margin: 10px auto; /* تقليل الحواف العلوية والسفلية */
+    }
+
+    /* تصميم كل بطاقة */
+    .team-stat-card {
+        width: auto; /* السماح للبطاقات بالتكيف مع الحاوية */
+        padding: 10px; /* تقليل الحشو الداخلي */
+        font-size: 14px; /* تصغير النصوص لتناسب الجوال */
+    }
+
+    .team-stat-card i {
+        font-size: 1.5rem; /* تصغير الأيقونة */
+        margin-bottom: 8px;
+    }
+
+    .team-stat-card h3 {
+        font-size: 1rem; /* تصغير النص */
+    }
+
+    .team-stat-card p {
+        font-size: 1.1rem; /* تصغير النص */
+    }
+}
+@media (max-width: 768px) {
+    /* ضبط عرض الجدول */
     #team-stats-table,
     #year-stats-table {
-        width: 100%; /* العرض الكامل للجوال */
+        width: 95%; /* تقليل العرض لإظهار الجدول بالكامل */
         margin: 0 auto; /* توسيط الجدول */
         font-size: 12px; /* تصغير الخط لتناسب الجوال */
     }
 
     #team-stats-table th, #team-stats-table td,
     #year-stats-table th, #year-stats-table td {
-        padding: 8px; /* تقليل المسافة داخل الخلايا */
-    }
-
-    /* توسيط البطاقات الرباعية */
-    .team-stats-container {
-        flex-wrap: wrap; /* السماح بالتفاف البطاقات */
-        justify-content: center; /* توسيط البطاقات */
-        gap: 10px; /* تقليل المسافات بين البطاقات */
-    }
-
-    .team-stat-card {
-        width: 45%; /* عرض كل بطاقة نصف الشاشة */
-        margin-bottom: 10px; /* مسافة بين البطاقات */
-    }
-
-    /* الأزرار (مثل الفلترة) */
-    .team-filter-btn {
-        font-size: 12px; /* تقليل حجم النص */
         padding: 8px; /* تقليل الحشو */
-    }
-
-    /* تحسين عرض الجدولين */
-    #team-stats-table th, #team-stats-table td,
-    #year-stats-table th, #year-stats-table td {
         word-wrap: break-word; /* كسر النصوص الطويلة */
-        text-align: center; /* توسيط النصوص داخل الجدول */
+        text-align: center; /* توسيط النصوص */
     }
 
-    /* تحسين المسافات العلوية والسفلية */
-    .pagination-controls {
-        margin-top: 10px; /* تقليل المسافة العلوية */
-    }
-}
-
+   
