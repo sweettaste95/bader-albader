@@ -102,8 +102,9 @@
     }
 
     .team-stat-card {
-        width: 120px; /* تصغير عرض البطاقة */
-        padding: 10px; /* تقليل الحواف الداخلية */
+        width: 130px; /* ضبط العرض */
+        height: 130px; /* ضبط الطول */
+        padding: 10px;
         background-color: #f8f9fa;
         border: 1px solid #ddd;
         border-radius: 10px;
@@ -113,15 +114,15 @@
     }
 
     .team-stat-card i {
-        font-size: 1.5rem; /* تصغير الأيقونات */
+        font-size: 1.5rem; /* ضبط حجم الأيقونات */
         margin-bottom: 5px;
     }
 
     .team-stat-card h3 {
-        font-size: 0.9rem; /* تصغير العناوين */
+        font-size: 0.9rem; /* ضبط حجم النصوص */
     }
 
     .team-stat-card p {
-        font-size: 1rem; /* تصغير النص */
+        font-size: 1rem; /* ضبط حجم النصوص */
     }
 }
