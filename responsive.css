@@ -139,21 +139,23 @@
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
     }
 
+   @media (max-width: 768px) {
+    /* تعديل محتوى الصفحة لإضافة مساحة أسفل الفوتر */
     #main-content {
-        padding-bottom: 70px; /* إضافة مساحة لتجنب تغطية الفوتر */
+        padding-bottom: 100px; /* إضافة مساحة كافية أسفل الفوتر */
     }
 
+    /* تعديل زر الرجوع ليظهر أعلى الفوتر مباشرة */
     .back-to-home-btn {
-        position: fixed;
-        bottom: 70px; /* فوق الفوتر */
-        left: 50%;
-        transform: translateX(-50%);
+        position: relative; /* جعله داخل محتوى الصفحة */
+        margin-top: 20px; /* مسافة من أعلى الفوتر */
+        display: block; /* محاذاته إلى المنتصف */
         background-color: #005fbf;
         color: white;
         padding: 10px 20px;
         border-radius: 5px;
         font-size: 14px;
-        z-index: 1100; /* أعلى من الفوتر */
+        text-align: center;
         cursor: pointer;
     }
 }
