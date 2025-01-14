@@ -119,3 +119,41 @@
         font-size: 1rem; /* ضبط حجم النصوص */
     }
 }
+
+
+/* =========================================================== */
+
+
+@media (max-width: 768px) {
+    .footer {
+        background-color: #002080;
+        color: white;
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        z-index: 1000;
+        padding: 10px 0;
+        font-size: 0.9rem;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #main-content {
+        padding-bottom: 70px; /* إضافة مساحة لتجنب تغطية الفوتر */
+    }
+
+    .back-to-home-btn {
+        position: fixed;
+        bottom: 70px; /* فوق الفوتر */
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #005fbf;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        z-index: 1100; /* أعلى من الفوتر */
+        cursor: pointer;
+    }
+}
