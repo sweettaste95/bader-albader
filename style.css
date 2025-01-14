@@ -2,6 +2,11 @@
     .hidden {
     display: none !important;
 }
+.logo {
+    width: 60px; /* حجم اللوغو */
+    height: auto;
+    margin-right: 80px; /* مساحة بجانب اللوغو */
+}
 
 /* القاعدة العامة ------------------------------------------------------------- */
  html, body {
@@ -141,6 +146,14 @@
     margin-left: auto;
     margin-right: auto;
 }
+/* تنسيق الشعار في صفحة التسجيل */
+.register-logo {
+    display: block;
+    margin: 20px auto; /* توسيط اللوغو */
+    width: 100px; /* حجم مناسب */
+    height: auto;
+    opacity: 0.9; /* شفافية خفيفة */
+}
 
 /* رسائل الخطأ */
 .error-message {
@@ -177,6 +190,7 @@
     text-align: center;
     font-weight: bold; /* جعل النص بولد */
 }
+
 
 /* الهيدر ------------------------------------------------------------------- */
 .header {
@@ -324,13 +338,32 @@ footer-link:hover {
     height: 20px;
 }
 
-/* حقوق الطبع */
 .footer-copyright {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* مسافة بين النص والشعار */
     font-size: 14px;
     font-weight: bold;
-    margin-top: 10px;
 }
 
+.logo-footer-inline {
+    width: 25px; /* حجم الشعار */
+    height: auto;
+    opacity: 0.8; /* شفافية بسيطة */
+}
+
+.watermark {
+    position: fixed;
+    top: 50%; /* يتمركز في منتصف الصفحة عموديًا */
+    left: 50%; /* يتمركز في منتصف الصفحة أفقيًا */
+    transform: translate(-50%, -50%); /* تصحيح المحاذاة إلى المنتصف تمامًا */
+    z-index: 999; /* أقل من المحتوى الآخر */
+    opacity: 0.2; /* شفافية أكثر لعدم التأثير على المحتوى */
+    width: 200px; /* عرض الشعار */
+    height: auto; /* ارتفاع متناسب */
+    pointer-events: none; /* لا يتفاعل مع المستخدم */
+}
 
 /* زر تسجيل الخروج في الهيدر */
 .logout-button {
