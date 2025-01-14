@@ -22,12 +22,6 @@
         height: 150px;
     }
 }
- /* الحاوية الرئيسية */
-    #main-content {
-        padding: 10px; /* تقليل الحواف */
-        overflow-x: hidden; /* منع التمرير الأفقي */
-    }
-}
 
 /* =========================================================== */
 
@@ -60,51 +54,40 @@
 
 /* =========================================================== */
 
-
-@media (max-width: 768px) {
-    /* الحاوية الرئيسية للبطاقات */
-    .team-stats-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* صفين، بطاقتان في كل صف */
-        gap: 15px; /* مسافة بين البطاقات */
-        justify-content: center; /* توسيط البطاقات */
-        margin: 10px auto; /* تقليل الحواف العلوية والسفلية */
-    }
-
-    /* تصميم كل بطاقة */
-    .team-stat-card {
-        width: auto; /* السماح للبطاقات بالتكيف مع الحاوية */
-        padding: 10px; /* تقليل الحشو الداخلي */
-        font-size: 14px; /* تصغير النصوص لتناسب الجوال */
-    }
-
-    .team-stat-card i {
-        font-size: 1.5rem; /* تصغير الأيقونة */
-        margin-bottom: 8px;
-    }
-
-    .team-stat-card h3 {
-        font-size: 1rem; /* تصغير النص */
-    }
-
-    .team-stat-card p {
-        font-size: 1.1rem; /* تصغير النص */
-    }
-}
 @media (max-width: 768px) {
     /* ضبط عرض الجدول */
     #team-stats-table,
     #year-stats-table {
-        width: 95%; /* تقليل العرض لإظهار الجدول بالكامل */
-        margin: 0 auto; /* توسيط الجدول */
-        font-size: 12px; /* تصغير الخط لتناسب الجوال */
+        width: 100%;
+        overflow-x: auto; /* السماح بالتمرير الأفقي فقط عند الحاجة */
+        margin: 0 auto;
+        font-size: 12px; /* تصغير الخط قليلاً */
+        border-spacing: 0; /* إزالة المسافة بين الخلايا */
     }
 
     #team-stats-table th, #team-stats-table td,
     #year-stats-table th, #year-stats-table td {
-        padding: 8px; /* تقليل الحشو */
+        padding: 8px;
         word-wrap: break-word; /* كسر النصوص الطويلة */
-        text-align: center; /* توسيط النصوص */
+        text-align: center;
     }
 
-   
+    /* ضبط التوسيط */
+    #main-content {
+        padding: 10px;
+        text-align: center;
+    }
+}
+@media (max-width: 768px) {
+    #main-content {
+        width: 95%;
+        margin: 0 auto;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .screen {
+        max-width: 100%; /* السماح للشاشة بالتمدد */
+        padding: 10px;
+    }
+}
