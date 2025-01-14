@@ -74,12 +74,6 @@
 
     /* ضبط التوسيط */
     #main-content {
-        padding: 10px;
-        text-align: center;
-    }
-}
-@media (max-width: 768px) {
-    #main-content {
         width: 95%;
         margin: 0 auto;
         padding: 10px;
@@ -90,8 +84,7 @@
         max-width: 100%; /* السماح للشاشة بالتمدد */
         padding: 10px;
     }
-}
-@media (max-width: 768px) {
+
     /* تقليل حجم البطاقات الرباعية */
     .team-stats-container {
         display: grid;
