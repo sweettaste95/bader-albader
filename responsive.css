@@ -205,3 +205,26 @@
         font-size: 24px; /* تكبير الأيقونة قليلاً للجوال */
     }
 }
+@media (max-width: 768px) {
+    .watermark {
+        width: 150px;
+        top: auto; /* لمنع التمركز في المنتصف */
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.2;
+    }
+
+    .logo-footer-inline {
+        width: 20px; /* حجم أصغر للشعار في الفوتر */
+    }
+
+    .logout-button {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+
+    .register-logo {
+        width: 80px;
+    }
+}
