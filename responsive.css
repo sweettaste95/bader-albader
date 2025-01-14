@@ -163,32 +163,36 @@
 
 /* =========================================================== */
 
+/* التنسيق الأساسي */
+.logout-button {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+}
 
+.logout-button i {
+    font-size: 20px; /* حجم الأيقونة */
+    margin-left: 5px; /* مسافة بين الأيقونة والنص */
+}
+
+/* تنسيق النص */
+.logout-text {
+    display: inline; /* يظهر النص افتراضيًا */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* للجوالات (إخفاء النص) */
 @media (max-width: 768px) {
-    .logout-button {
-        background-color: white; /* لون الخلفية */
-        color: #8b0000; /* لون السهم */
-        border: 1px solid #8b0000; /* إطار بنفس لون السهم */
-        padding: 10px; /* حجم مناسب */
-        border-radius: 10px; /* حواف مستديرة */
-        cursor: pointer;
-        font-size: 16px; /* تصغير الخط */
-        display: flex; /* لعرض الأيقونة فقط */
-        align-items: center; /* محاذاة الأيقونة عموديًا */
-        justify-content: center; /* تمركز الأيقونة أفقيًا */
-        width: 40px; /* عرض الزر */
-        height: 40px; /* ارتفاع الزر */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* ظل الزر */
-    }
-
-    .logout-button:hover {
-        background-color: #f8f8f8; /* لون عند التحويم */
-        border-color: #4b0082; /* تغيير لون الإطار عند التحويم */
+    .logout-text {
+        display: none; /* إخفاء النص */
     }
 
     .logout-button i {
-        font-size: 18px; /* حجم أيقونة السهم */
-        color: #8b0000; /* لون أيقونة السهم */
+        font-size: 24px; /* تكبير الأيقونة قليلاً للجوال */
     }
 }
-
