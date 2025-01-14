@@ -91,3 +91,37 @@
         padding: 10px;
     }
 }
+@media (max-width: 768px) {
+    /* تقليل حجم البطاقات الرباعية */
+    .team-stats-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* صفين ببطاقتين لكل صف */
+        gap: 10px; /* مسافة بين البطاقات */
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .team-stat-card {
+        width: 120px; /* تصغير عرض البطاقة */
+        padding: 10px; /* تقليل الحواف الداخلية */
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 12px; /* تصغير النص */
+    }
+
+    .team-stat-card i {
+        font-size: 1.5rem; /* تصغير الأيقونات */
+        margin-bottom: 5px;
+    }
+
+    .team-stat-card h3 {
+        font-size: 0.9rem; /* تصغير العناوين */
+    }
+
+    .team-stat-card p {
+        font-size: 1rem; /* تصغير النص */
+    }
+}
