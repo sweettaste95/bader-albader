@@ -1,0 +1,64 @@
+/* تنسيقات خاصة بالجوال (الشاشات أقل من 768px) */
+@media (max-width: 768px) {
+    .header {
+        height: 50px; /* ارتفاع الهيدر يبقى صغيرًا للجوال */
+        padding: 0 10px;
+    }
+
+    .logout-button {
+        font-size: 16px; /* حجم أصغر للرمز */
+    }
+
+    .hamburger {
+        font-size: 20px; /* حجم أصغر لرمز الميني بار */
+    }
+
+    .welcome-title {
+        font-size: 18px; /* خط أصغر للنص */
+    }
+
+    .welcome-image {
+        width: 150px; /* تصغير الصورة أكثر للجوال */
+        height: 150px;
+    }
+}
+
+/* =========================================================== */
+
+/* تنسيقات خاصة بالجوال */
+@media (max-width: 768px) {
+    .manager-container {
+        max-width: 95%; /* تقليل العرض أكثر */
+    }
+
+    .manager-main-card {
+        max-width: 350px; /* تقليل الحد الأقصى للعرض */
+    }
+
+    .manager-image {
+        width: 100px; /* تصغير الصورة */
+        height: 100px;
+    }
+
+    .manager-name {
+        font-size: 1rem; /* تقليل حجم النص */
+    }
+
+    .manager-stats-row {
+        flex-direction: column; /* ترتيب البطاقات بشكل عمودي */
+    }
+
+    .stat-card {
+        padding: 10px; /* تقليل الحشو */
+    }
+
+    .navigation-buttons {
+        flex-direction: column; /* ترتيب الأزرار بشكل عمودي */
+        gap: 5px;
+    }
+
+    .navigation-buttons button {
+        font-size: 0.8rem; /* تصغير الأزرار */
+        padding: 8px;
+    }
+}
