@@ -233,15 +233,23 @@
 /* التصاميم المخصصة لأجهزة الجوال */
 @media only screen and (max-width: 768px) {
     #map-container {
-        width: 90%; /* جعل الخريطة تمتد بشكل أكبر على الجوال */
-        height: 400px; /* تقليل الارتفاع قليلاً */
+          height: 350px; /* تقليل الطول */
+        width: 90%; /* زيادة العرض لتتناسب مع الشاشة */
+        margin: 0 auto;
+        border-radius: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        border: 3px solid #005fbf;
     }
 
     #locations-bar {
-        flex-wrap: wrap; /* جعل الأزرار تتوزع في صفوف متعددة */
-        padding: 5px; /* تقليل الحواف */
-        margin: 10px auto; /* تقليل المسافات */
-        width: 95%; /* استخدام عرض أكبر */
+       flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        margin: 10px auto;
+        background-color: #001F54;
+        border-radius: 10px;
+        width: 90%;
     }
 
     #locations-bar div {
