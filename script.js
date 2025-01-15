@@ -375,7 +375,10 @@ function handleButtonClick(event) {
        case "world-cup":
     openWorldCup(); // دالة عرض قسم كأس العالم
     break;
- 
+    case "hilal-map":
+            openHilalMap(); // فتح قسم "منصات الهلال"
+            break;
+
 
         default:
             mainContent.innerHTML = `<h2>محتوى غير معروف</h2>`;
@@ -1184,5 +1187,162 @@ function openWorldCupDetails(year) {
             `;
             document.getElementById("world-cup-details").innerHTML += card;
         });
+    });
+}
+
+//============================================================================================================================================
+
+
+
+function openHilalMap() {
+    const mainContent = document.getElementById("main-content");
+    mainContent.innerHTML = `
+        <h2 id="map-title" style="text-align: center; margin-bottom: 20px;">🌍 منصات الهلال</h2>
+        <div id="map-container" style="height: 500px; width: 70%; margin: 0 auto; border-radius: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); border: 3px solid #005fbf;"></div>
+        <div id="stadiums-bar" style="
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 10px; 
+            margin: 20px auto 10px; 
+            background-color: #001F54; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 70%;">
+        </div>
+        <button id="reset-map" style="
+            display: block; 
+            margin: 20px auto; 
+            padding: 10px 20px; 
+            background-color: #005fbf; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+            font-weight: bold;">
+            <i class="fa fa-map"></i> إعادة تعيين الخريطة
+        </button>
+    `;
+
+    const map = L.map('map-container').setView([24.774265, 46.738586], 6);
+
+    // إضافة طبقة الخريطة
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    const markers = L.markerClusterGroup();
+    const stadiumsBar = document.getElementById("stadiums-bar");
+
+    // تحميل البيانات من Google Sheets
+    fetchDataFromSheet("MAPS", (data) => {
+        const stadiums = {};
+
+        // معالجة البيانات
+        data.forEach(row => {
+            const coordinates = row.coordinates.split(',').map(coord => parseFloat(coord.trim()));
+            const stadium = row.Stadium;
+            const tournament = row.Name;
+            const year = row.Year;
+
+            if (!stadiums[stadium]) {
+                stadiums[stadium] = {
+                    coordinates,
+                    tournaments: []
+                };
+            }
+            stadiums[stadium].tournaments.push({ name: tournament, year });
+        });
+
+        // إضافة الأيقونات إلى الخريطة
+        Object.keys(stadiums).forEach(stadium => {
+            const { coordinates, tournaments } = stadiums[stadium];
+            const tournamentDetails = tournaments.map(t => `
+                <div style="margin-bottom: 5px;">
+                    <span style="color: #005fbf; font-weight: bold;">${t.name}</span> - 
+                    <span style="color: #FF4500;">${t.year}</span>
+                </div>
+            `).join("");
+
+            const popupContent = `
+                <div style="text-align: center; max-height: 200px; overflow-y: auto; padding: 10px;">
+                    <h3 style="margin-bottom: 10px; color: #005fbf; border-bottom: 1px solid #005fbf;">${stadium}</h3>
+                    <p style="font-size: 1.2rem; color: #005fbf; font-weight: bold;">
+                        عدد البطولات: <span style="color: #FF4500;">${tournaments.length}</span>
+                    </p>
+                    ${tournamentDetails}
+                </div>
+            `;
+
+            const marker = L.marker(coordinates, {
+                icon: L.icon({
+                    iconUrl: 'https://github.com/sweettaste95/hilal-images/blob/main/png-transparent-copa-del-rey-football-cup-trophy-football-color-gold-sports11.png?raw=true',
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 40],
+                    popupAnchor: [0, -40]
+                })
+            }).bindPopup(popupContent);
+
+            markers.addLayer(marker);
+
+            // إضافة الملعب إلى الشريط السفلي
+            const stadiumItem = document.createElement("div");
+            stadiumItem.style = `
+                display: inline-block;
+                margin: 5px 10px;
+                padding: 10px;
+                background-color: #005fbf;
+                color: white;
+                border-radius: 5px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            `;
+            stadiumItem.innerHTML = `
+                <span style="color: white;">${stadium}</span>
+                <span style="background-color: #FF4500; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px;">
+                    ${tournaments.length}
+                </span>
+            `;
+            stadiumItem.addEventListener("click", () => {
+                map.setView(coordinates, 8); // الانتقال إلى موقع الملعب
+            });
+            stadiumItem.addEventListener("mouseover", () => {
+                stadiumItem.style.transform = "scale(1.1)";
+            });
+            stadiumItem.addEventListener("mouseout", () => {
+                stadiumItem.style.transform = "scale(1)";
+            });
+
+            stadiumsBar.appendChild(stadiumItem);
+        });
+
+        map.addLayer(markers);
+
+        // زر إعادة تعيين الخريطة
+        document.getElementById('reset-map').addEventListener('click', () => {
+            map.setView([24.774265, 46.738586], 6);
+        });
+
+        // تحديث أبعاد الخريطة بعد التحميل
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 200);
+    });
+
+    // تأثير hover للزر
+    const resetButton = document.getElementById('reset-map');
+    resetButton.addEventListener('mouseover', () => {
+        resetButton.style.backgroundColor = '#003d80';
+    });
+    resetButton.addEventListener('mouseout', () => {
+        resetButton.style.backgroundColor = '#005fbf';
+    });
+    resetButton.addEventListener('mousedown', () => {
+        resetButton.style.transform = 'scale(0.95)';
+    });
+    resetButton.addEventListener('mouseup', () => {
+        resetButton.style.transform = 'scale(1)';
     });
 }
