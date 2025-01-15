@@ -1346,3 +1346,119 @@ function openHilalMap() {
         resetButton.style.transform = 'scale(1)';
     });
 }
+
+
+
+
+
+
+let timelineData = "";
+
+// إعداد الشريط الزمني
+fetchDataFromSheet("today-event", (todayEvents) => {
+    const currentMonth = new Date().getMonth() + 1;
+    const currentMonthEvents = todayEvents.filter(event => {
+        const eventDateParts = event.date.split("/");
+        const eventMonth = parseInt(eventDateParts[1]);
+        return eventMonth === currentMonth;
+    });
+
+    // 1. رابط التليجرام
+    timelineData += `
+        <span style="display: inline-block; margin-right: 50px;">
+            <a href="https://t.me/AlHilalFansChannel" target="_blank"
+                style="color: #fff; text-decoration: none; font-weight: bold;">
+                📱 اشترك في قناة تيليجرام للحصول على كل جديد
+            </a>
+        </span>
+    `;
+
+    // 2. آخر مباراة
+    fetchDataFromSheet("pastGames", (pastGames) => {
+        if (pastGames.length > 0) {
+            const lastGame = pastGames[pastGames.length - 1];
+            timelineData += `
+                <span style="display: inline-block; margin-right: 50px;">
+                    ⚽ <span style="color:#FFA500; font-weight:bold;">آخر مباراة:</span>
+                    <span style="color:#fff; font-weight:bold;">${lastGame.Team1}</span>
+                    <span style="color:#FFD700; font-weight:bold;">(${lastGame.Score1}-${lastGame.Score2})</span>
+                    <span style="color:#fff; font-weight:bold;">${lastGame.Team2}</span>
+                </span>
+            `;
+        } else {
+            timelineData += `
+                <span style="display: inline-block; margin-right: 50px;">
+                    ⚽ <span style="color:#FFA500; font-weight:bold;">آخر مباراة:</span>
+                    <span style="color:#fff;">لا توجد مباريات مسجلة</span>
+                </span>
+            `;
+        }
+
+        // 3. بطولات هذا الشهر
+        if (currentMonthEvents.length > 0) {
+            const eventsText = currentMonthEvents.map(event => `
+                🏆 <span style="color:#FFD700; font-weight:bold;">${event.title}</span>
+                (<span style="color:#fff;">${event.year}</span>)
+            `).join(" | ");
+            timelineData += `
+                <span style="display: inline-block; margin-right: 50px;">
+                    📅 <span style="color:#FFA500; font-weight:bold;">بطولات هذا الشهر:</span> ${eventsText}
+                </span>
+            `;
+        } else {
+            timelineData += `
+                <span style="display: inline-block; margin-right: 50px;">
+                    📅 <span style="color:#FFA500; font-weight:bold;">بطولات هذا الشهر:</span>
+                    <span style="color:#fff;">لا توجد بطولات لهذا الشهر</span>
+                </span>
+            `;
+        }
+
+        // تحديث الشريط الزمني
+        const timelineContainer = document.getElementById("timeline-container");
+        timelineContainer.innerHTML = timelineData;
+        timelineContainer.style.display = "block";
+    });
+});
+
+// إضافة الشريط إلى DOM
+document.addEventListener("DOMContentLoaded", () => {
+    const header = document.querySelector("header");
+    const timeline = document.createElement("div");
+    timeline.id = "timeline-container";
+    timeline.style = `
+      display: fixed; 
+       top: 50px;
+        left: 0;
+        width: 100%;
+        color: white;
+        font-size: 1.2rem; /* تكبير النص */
+        padding: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        animation: scroll 50s linear infinite; /* تقليل السرعة */
+    `;
+    timeline.innerHTML = "جاري تحميل البيانات...";
+    header.insertAdjacentElement("afterend", timeline);
+});
+
+// حركة الشريط
+const style = document.createElement("style");
+style.innerHTML = `
+    @keyframes scroll {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+    #timeline-container a:hover {
+        text-decoration: underline;
+    }
+    #timeline-container span {
+        font-size: 1rem;
+        font-weight: bold;
+        white-space: nowrap; /* منع الالتفاف */
+    }
+    #timeline-container span > span {
+        margin: 0 5px; /* إضافة مسافات بين العناصر داخل النص */
+    }
+`;
+document.head.appendChild(style);
