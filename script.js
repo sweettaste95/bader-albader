@@ -1314,12 +1314,12 @@ function openHilalMap() {
             regionItem.innerHTML = `
                 <span style="margin-right: 5px;">🏆</span> <!-- أيقونة الكأس -->
                 <span>${region}</span>
-                <span style="background-color: #52159e; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px;">
+                <span style="background-color:#52159e; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px;">
                     ${stadiums.length}
                 </span>
             `;
             regionItem.addEventListener("click", () => {
-                map.fitBounds(markers.getBounds()); // الانتقال إلى المنطقة
+                map.setView(coordinates, 10); // الانتقال مباشرة إلى الموقع
             });
             regionItem.addEventListener("mouseover", () => {
                 regionItem.style.transform = "scale(1.1)";
@@ -1432,7 +1432,7 @@ document.addEventListener("DOMContentLoaded", () => {
         font-size: 1.2rem; /* تكبير النص */
         padding: 10px;
         white-space: nowrap;
-        overflow: hidden;
+        overflow: auto;
         animation: scroll 50s linear infinite; /* تقليل السرعة */
     `;
     timeline.innerHTML = "جاري تحميل البيانات...";
