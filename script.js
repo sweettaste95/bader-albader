@@ -1196,7 +1196,7 @@ function openHilalMap() {
     mainContent.innerHTML = `
         <h2 id="map-title" style="text-align: center; margin-bottom: 20px;">🌍 منصات الهلال</h2>
         <div id="map-container" style="height: 500px; width: 70%; margin: 0 auto; border-radius: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); border: 3px solid #005fbf;"></div>
-        <div id="locations-bar" style="
+        <div id="regions-bar" style="
             display: flex; 
             flex-wrap: wrap; 
             justify-content: center; 
@@ -1229,60 +1229,63 @@ function openHilalMap() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    // إعداد الدوائر التجميعية باللون الأزرق
     const markers = L.markerClusterGroup({
-        iconCreateFunction: function (cluster) {
+        iconCreateFunction: (cluster) => {
+            const count = cluster.getChildCount();
             return L.divIcon({
-                html: `<div style="background-color: #005fbf; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-weight: bold;">${cluster.getChildCount()}</div>`,
-                className: "cluster-icon",
-                iconSize: [40, 40]
+                html: `<div style="
+                    background-color: #005fbf;
+                    color: white;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-weight: bold;
+                ">${count}</div>`,
+                className: 'custom-cluster-icon',
+                iconSize: [40, 40],
             });
         }
     });
 
-    const locationsBar = document.getElementById("locations-bar");
+    const regionsBar = document.getElementById("regions-bar");
 
     // تحميل البيانات من Google Sheets
     fetchDataFromSheet("MAPS", (data) => {
-        const locations = {};
+        const regions = {};
 
         // معالجة البيانات
         data.forEach(row => {
             const coordinates = row.coordinates.split(',').map(coord => parseFloat(coord.trim()));
-            const location = row.Location || "غير محدد"; // اسم المدينة
-            const stadium = row.Stadium; // اسم الملعب
+            const region = row.Location || "غير محدد"; // المنطقة
+            const stadium = row.Stadium;
             const tournament = row.Name;
             const year = row.Year;
 
-            if (!locations[location]) {
-                locations[location] = {
-                    coordinates,
+            if (!regions[region]) {
+                regions[region] = {
+                    coordinates: coordinates,
                     stadiums: []
                 };
             }
-            locations[location].stadiums.push({ stadium, tournament, year, coordinates });
+
+            regions[region].stadiums.push({ stadium, tournament, year, coordinates });
         });
 
-        // إضافة الأزرار بناءً على المواقع
-        Object.keys(locations).forEach(location => {
-            const { coordinates, stadiums } = locations[location];
-            const tournamentDetails = stadiums.map(s => `
-                <div style="margin-bottom: 5px;">
-                    <span style="color: #005fbf; font-weight: bold;">${s.tournament}</span> - 
-                    <span style="color: #FF4500;">${s.year}</span>
-                </div>
-            `).join("");
+        // إضافة العلامات (Markers) إلى الخريطة
+        Object.keys(regions).forEach(region => {
+            const { coordinates, stadiums } = regions[region];
 
-            // إنشاء العلامات
-            stadiums.forEach(({ stadium, tournament, year, coordinates }) => {
+            stadiums.forEach(({ stadium, tournament, year }) => {
                 const popupContent = `
                     <div style="text-align: center; padding: 10px;">
-                        <h3 style="margin-bottom: 10px; color: #005fbf; border-bottom: 1px solid #005fbf;">${stadium}</h3>
-                        <p style="font-size: 1.2rem; color: #005fbf; font-weight: bold;">
-                            البطولة: <span style="color: #FF4500;">${tournament}</span> (${year})
-                        </p>
+                        <h3 style="margin-bottom: 10px; color: #005fbf;">${stadium}</h3>
+                        <p style="font-size: 1rem; color: #005fbf;">البطولة: ${tournament} (${year})</p>
                     </div>
                 `;
-
                 const marker = L.marker(coordinates, {
                     icon: L.icon({
                         iconUrl: 'https://github.com/sweettaste95/hilal-images/blob/main/png-transparent-copa-del-rey-football-cup-trophy-football-color-gold-sports11.png?raw=true',
@@ -1291,14 +1294,14 @@ function openHilalMap() {
                         popupAnchor: [0, -40]
                     })
                 }).bindPopup(popupContent);
-
                 markers.addLayer(marker);
             });
 
-            // إضافة المدينة إلى الشريط السفلي
-            const locationItem = document.createElement("div");
-            locationItem.style = `
-                display: inline-block;
+            // إضافة المنطقة إلى الشريط السفلي
+            const regionItem = document.createElement("div");
+            regionItem.style = `
+                display: inline-flex; 
+                align-items: center; 
                 margin: 5px 10px;
                 padding: 10px;
                 background-color: #005fbf;
@@ -1308,23 +1311,24 @@ function openHilalMap() {
                 cursor: pointer;
                 transition: transform 0.3s ease;
             `;
-            locationItem.innerHTML = `
-                <span style="color: white;">${location}</span>
-                <span style="background-color: #FF4500; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px;">
+            regionItem.innerHTML = `
+                <span style="margin-right: 5px;">🏆</span> <!-- أيقونة الكأس -->
+                <span>${region}</span>
+                <span style="background-color: #52159e; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px;">
                     ${stadiums.length}
                 </span>
             `;
-            locationItem.addEventListener("click", () => {
-                map.setView(coordinates, 8); // الانتقال إلى موقع المدينة
+            regionItem.addEventListener("click", () => {
+                map.fitBounds(markers.getBounds()); // الانتقال إلى المنطقة
             });
-            locationItem.addEventListener("mouseover", () => {
-                locationItem.style.transform = "scale(1.1)";
+            regionItem.addEventListener("mouseover", () => {
+                regionItem.style.transform = "scale(1.1)";
             });
-            locationItem.addEventListener("mouseout", () => {
-                locationItem.style.transform = "scale(1)";
+            regionItem.addEventListener("mouseout", () => {
+                regionItem.style.transform = "scale(1)";
             });
 
-            locationsBar.appendChild(locationItem);
+            regionsBar.appendChild(regionItem);
         });
 
         map.addLayer(markers);
@@ -1340,7 +1344,6 @@ function openHilalMap() {
         }, 200);
     });
 }
-
 
 //============================================================================================================================================
 
