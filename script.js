@@ -378,6 +378,9 @@ function handleButtonClick(event) {
     case "hilal-map":
             openHilalMap(); // فتح قسم "منصات الهلال"
             break;
+case "privacy-policy":
+    openContent("سياسة الخصوصية");
+    break;
 
 
         default:
@@ -1152,6 +1155,7 @@ function openWorldCup() {
                 <button class="details-button" onclick="openWorldCupDetails(${entry.year})">عرض التفاصيل</button>
             </div>
         `;
+
         document.getElementById("world-cup-main").innerHTML += card;
     });
 }
@@ -1185,6 +1189,7 @@ function openWorldCupDetails(year) {
                     <iframe src="https://www.youtube.com/embed/${match.HighlightsLink}" class="video-frame"></iframe>
                 </div>
             `;
+
             document.getElementById("world-cup-details").innerHTML += card;
         });
     });
@@ -1459,3 +1464,40 @@ style.innerHTML = `
     }
 `;
 document.head.appendChild(style);
+
+
+function openContent(section) {
+    const mainContent = document.getElementById("main-content");
+
+    // مسح المحتوى السابق
+    clearContent();
+
+    if (section === 'سياسة الخصوصية') {
+        // عرض سياسة الخصوصية
+        mainContent.innerHTML = `
+            <div class="privacy-container">
+                <h1>سياسة الخصوصية</h1>
+                <p>مرحبًا بكم في تطبيق "بطولات الهلال". هذا التطبيق تم تطويره باجتهاد شخصي ويهدف إلى جمع معلومات حول تاريخ وإنجازات نادي الهلال بشكل شامل ومفيد للجمهور.</p>
+                
+                <h2>بيان الاستقلالية</h2>
+                <p>هذا التطبيق غير تابع أو مدعوم من قبل نادي الهلال الرسمي أو أي جهة رسمية أخرى. جميع الجهود المبذولة هنا شخصية ومستقلة.</p>
+                
+                <h2>مصادر المحتوى</h2>
+                <p>تم جمع جميع البيانات والمعلومات من مصادر عامة موثوقة مثل الإنترنت. مقاطع الفيديو المعروضة من مصادرها الأصلية (مثل قنوات اليوتيوب) ولم يتم تعديلها. إذا كنت مالكًا لأي محتوى وترغب في إزالته، يرجى التواصل معنا.</p>
+                
+                <h2>حقوق النشر</h2>
+                <p>جميع حقوق الملكية الفكرية للتطبيق محفوظة. يمنع نسخ أو تعديل أو استخدام التطبيق لأغراض تجارية دون إذن مسبق.</p>
+                
+                <h2>سياسة البيانات</h2>
+                <p>نحن لا نجمع أو نشارك بيانات المستخدمين مع أطراف ثالثة. إذا قمت بالتسجيل في التطبيق، سيتم استخدام بياناتك فقط لتحسين تجربة الاستخدام.</p>
+                
+                <h2>تواصل معنا</h2>
+                <p>إذا كان لديك أي استفسارات أو اعتراضات، يمكنك التواصل معنا عبر البريد التالي:</p>
+            </div>
+        `;
+
+        // إضافة زر الرجوع إلى الشاشة الرئيسية
+        addHomeButton();
+        mainContent.style.display = "block"; // عرض القسم
+    }
+}
