@@ -1191,15 +1191,12 @@ function openWorldCupDetails(year) {
 }
 
 //============================================================================================================================================
-
-
-
 function openHilalMap() {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = `
         <h2 id="map-title" style="text-align: center; margin-bottom: 20px;">🌍 منصات الهلال</h2>
         <div id="map-container" style="height: 500px; width: 70%; margin: 0 auto; border-radius: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); border: 3px solid #005fbf;"></div>
-        <div id="stadiums-bar" style="
+        <div id="locations-bar" style="
             display: flex; 
             flex-wrap: wrap; 
             justify-content: center; 
@@ -1232,63 +1229,75 @@ function openHilalMap() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    const markers = L.markerClusterGroup();
-    const stadiumsBar = document.getElementById("stadiums-bar");
+    const markers = L.markerClusterGroup({
+        iconCreateFunction: function (cluster) {
+            return L.divIcon({
+                html: `<div style="background-color: #005fbf; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-weight: bold;">${cluster.getChildCount()}</div>`,
+                className: "cluster-icon",
+                iconSize: [40, 40]
+            });
+        }
+    });
+
+    const locationsBar = document.getElementById("locations-bar");
 
     // تحميل البيانات من Google Sheets
     fetchDataFromSheet("MAPS", (data) => {
-        const stadiums = {};
+        const locations = {};
 
         // معالجة البيانات
         data.forEach(row => {
             const coordinates = row.coordinates.split(',').map(coord => parseFloat(coord.trim()));
-            const stadium = row.Stadium;
+            const location = row.Location || "غير محدد"; // اسم المدينة
+            const stadium = row.Stadium; // اسم الملعب
             const tournament = row.Name;
             const year = row.Year;
 
-            if (!stadiums[stadium]) {
-                stadiums[stadium] = {
+            if (!locations[location]) {
+                locations[location] = {
                     coordinates,
-                    tournaments: []
+                    stadiums: []
                 };
             }
-            stadiums[stadium].tournaments.push({ name: tournament, year });
+            locations[location].stadiums.push({ stadium, tournament, year, coordinates });
         });
 
-        // إضافة الأيقونات إلى الخريطة
-        Object.keys(stadiums).forEach(stadium => {
-            const { coordinates, tournaments } = stadiums[stadium];
-            const tournamentDetails = tournaments.map(t => `
+        // إضافة الأزرار بناءً على المواقع
+        Object.keys(locations).forEach(location => {
+            const { coordinates, stadiums } = locations[location];
+            const tournamentDetails = stadiums.map(s => `
                 <div style="margin-bottom: 5px;">
-                    <span style="color: #005fbf; font-weight: bold;">${t.name}</span> - 
-                    <span style="color: #FF4500;">${t.year}</span>
+                    <span style="color: #005fbf; font-weight: bold;">${s.tournament}</span> - 
+                    <span style="color: #FF4500;">${s.year}</span>
                 </div>
             `).join("");
 
-            const popupContent = `
-                <div style="text-align: center; max-height: 200px; overflow-y: auto; padding: 10px;">
-                    <h3 style="margin-bottom: 10px; color: #005fbf; border-bottom: 1px solid #005fbf;">${stadium}</h3>
-                    <p style="font-size: 1.2rem; color: #005fbf; font-weight: bold;">
-                        عدد البطولات: <span style="color: #FF4500;">${tournaments.length}</span>
-                    </p>
-                    ${tournamentDetails}
-                </div>
-            `;
+            // إنشاء العلامات
+            stadiums.forEach(({ stadium, tournament, year, coordinates }) => {
+                const popupContent = `
+                    <div style="text-align: center; padding: 10px;">
+                        <h3 style="margin-bottom: 10px; color: #005fbf; border-bottom: 1px solid #005fbf;">${stadium}</h3>
+                        <p style="font-size: 1.2rem; color: #005fbf; font-weight: bold;">
+                            البطولة: <span style="color: #FF4500;">${tournament}</span> (${year})
+                        </p>
+                    </div>
+                `;
 
-            const marker = L.marker(coordinates, {
-                icon: L.icon({
-                    iconUrl: 'https://github.com/sweettaste95/hilal-images/blob/main/png-transparent-copa-del-rey-football-cup-trophy-football-color-gold-sports11.png?raw=true',
-                    iconSize: [40, 40],
-                    iconAnchor: [20, 40],
-                    popupAnchor: [0, -40]
-                })
-            }).bindPopup(popupContent);
+                const marker = L.marker(coordinates, {
+                    icon: L.icon({
+                        iconUrl: 'https://github.com/sweettaste95/hilal-images/blob/main/png-transparent-copa-del-rey-football-cup-trophy-football-color-gold-sports11.png?raw=true',
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 40],
+                        popupAnchor: [0, -40]
+                    })
+                }).bindPopup(popupContent);
 
-            markers.addLayer(marker);
+                markers.addLayer(marker);
+            });
 
-            // إضافة الملعب إلى الشريط السفلي
-            const stadiumItem = document.createElement("div");
-            stadiumItem.style = `
+            // إضافة المدينة إلى الشريط السفلي
+            const locationItem = document.createElement("div");
+            locationItem.style = `
                 display: inline-block;
                 margin: 5px 10px;
                 padding: 10px;
@@ -1299,23 +1308,23 @@ function openHilalMap() {
                 cursor: pointer;
                 transition: transform 0.3s ease;
             `;
-            stadiumItem.innerHTML = `
-                <span style="color: white;">${stadium}</span>
+            locationItem.innerHTML = `
+                <span style="color: white;">${location}</span>
                 <span style="background-color: #FF4500; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px;">
-                    ${tournaments.length}
+                    ${stadiums.length}
                 </span>
             `;
-            stadiumItem.addEventListener("click", () => {
-                map.setView(coordinates, 8); // الانتقال إلى موقع الملعب
+            locationItem.addEventListener("click", () => {
+                map.setView(coordinates, 8); // الانتقال إلى موقع المدينة
             });
-            stadiumItem.addEventListener("mouseover", () => {
-                stadiumItem.style.transform = "scale(1.1)";
+            locationItem.addEventListener("mouseover", () => {
+                locationItem.style.transform = "scale(1.1)";
             });
-            stadiumItem.addEventListener("mouseout", () => {
-                stadiumItem.style.transform = "scale(1)";
+            locationItem.addEventListener("mouseout", () => {
+                locationItem.style.transform = "scale(1)";
             });
 
-            stadiumsBar.appendChild(stadiumItem);
+            locationsBar.appendChild(locationItem);
         });
 
         map.addLayer(markers);
@@ -1330,25 +1339,10 @@ function openHilalMap() {
             map.invalidateSize();
         }, 200);
     });
-
-    // تأثير hover للزر
-    const resetButton = document.getElementById('reset-map');
-    resetButton.addEventListener('mouseover', () => {
-        resetButton.style.backgroundColor = '#003d80';
-    });
-    resetButton.addEventListener('mouseout', () => {
-        resetButton.style.backgroundColor = '#005fbf';
-    });
-    resetButton.addEventListener('mousedown', () => {
-        resetButton.style.transform = 'scale(0.95)';
-    });
-    resetButton.addEventListener('mouseup', () => {
-        resetButton.style.transform = 'scale(1)';
-    });
 }
 
 
-
+//============================================================================================================================================
 
 
 
