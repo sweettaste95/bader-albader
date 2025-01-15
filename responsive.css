@@ -282,3 +282,21 @@
         padding: 5px; /* تقليل الحواف الداخلية */
     }
 }
+
+/* =========================================================== */
+
+
+@media (max-width: 768px) {
+    #timeline-container {
+        font-size: 0.9rem; /* تصغير النص */
+        padding: 5px;
+        white-space: nowrap; /* منع التفاف النص */
+        overflow-x: auto; /* السماح بالتمرير الأفقي فقط */
+        overflow-y: hidden; /* منع التمرير العمودي */
+        -webkit-overflow-scrolling: touch; /* تحسين التمرير على الجوال */
+    }
+
+    #timeline-container span {
+        margin-right: 20px; /* تصغير المسافات بين النصوص */
+    }
+}
