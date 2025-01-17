@@ -8,6 +8,87 @@
     margin-right: 80px; /* مساحة بجانب اللوغو */
 }
 
+
+/*=====================================================*/
+/* قواعد خاصة باتجاه الميني بار */
+body[lang="ar"] .minibar {
+    right: 0;
+    left: auto;
+    transform: translateX(100%); /* موقع الميني بار مغلق */
+}
+
+body[lang="en"] .minibar {
+    right: auto;
+    left: 0;
+    transform: translateX(-100%); /* موقع الميني بار مغلق */
+}
+
+body[lang="ar"] .minibar.open {
+    transform: translateX(0); /* فتح الميني بار */
+}
+
+body[lang="en"] .minibar.open {
+    transform: translateX(0); /* فتح الميني بار */
+}
+
+.direction-rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+.direction-ltr {
+    direction: ltr;
+    text-align: left;
+}
+
+/* دعم الاتجاه RTL (العربية) */
+body[lang="ar"] {
+    direction: rtl;
+    text-align: right;
+}
+
+/* دعم الاتجاه LTR (الإنجليزية) */
+body[lang="en"] {
+    direction: ltr;
+    text-align: left;
+}
+
+/* تأثير المحاذاة للعناصر */
+h1, h2, h3, p, div, span, button {
+    text-align: inherit;
+}
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+body[lang="ar"] .minibar {
+    right: 0;
+    left: auto;
+}
+
+body[lang="en"] .minibar {
+    right: auto;
+    left: 0;
+}
+body[lang="ar"] th, body[lang="ar"] td {
+    text-align: right;
+}
+
+body[lang="en"] th, body[lang="en"] td {
+    text-align: left;
+}
+body[lang="ar"] {
+    font-family: "Tahoma", Arial, sans-serif;
+}
+
+body[lang="en"] {
+    font-family: "Arial", sans-serif;
+}
+
+
 /* القاعدة العامة ------------------------------------------------------------- */
  html, body {
             margin: 0;
@@ -384,6 +465,18 @@ footer-link:hover {
     z-index: 999; /* فوق العناصر الأخرى */
     transform: translateX(100%); /* افتراضيًا تكون مغلقة */
     transition: transform 0.3s ease-in-out; /* تأثير الفتح والإغلاق */
+
+    display: flex; /* لجعل الأيقونة والنص في صف واحد */
+    align-items: center; /* محاذاة الأيقونة والنص رأسيًا */
+    gap: 8px; /* مسافة بين الأيقونة والنص */
+    padding: 10px; /* مساحة داخلية متناسقة */
+    text-align: right; /* التأكد من محاذاة النص */
+    direction: rtl; /* إذا كنت تريد اللغة العربية بشكل كامل */
+}
+
+.minibar-buttons i {
+    font-size: 18px; /* حجم الأيقونة */
+    margin: 0; /* إزالة المسافات الافتراضية */
 }
 
 /* الميني بار عند الفتح ---------------------------------------------------- */
