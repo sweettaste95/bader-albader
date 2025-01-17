@@ -1,3 +1,153 @@
+function toggleLanguage() {
+    // تحديث اللغة الحالية
+    currentLanguage = currentLanguage === "ar" ? "en" : "ar";
+
+    // تغيير خاصية اللغة في العنصر <html>
+    document.documentElement.setAttribute("lang", currentLanguage);
+
+    // تطبيق الترجمة
+    applyTranslations();
+
+    // تحديث اتجاه الصفحة
+    updateBodyDirection();
+
+    // تحديث النص الخاص بزر اللغة
+    updateLanguageToggleText();
+
+    // تبديل طبقة الخريطة
+    if (map && currentLayer) {
+        map.removeLayer(currentLayer);
+        const arabicLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        });
+
+        const englishLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        });
+
+        currentLayer = currentLanguage === "ar" ? arabicLayer : englishLayer;
+        currentLayer.addTo(map);
+    }
+}
+
+
+
+let currentLanguage = "ar"; // اللغة الافتراضية
+
+function toggleLanguage() {
+    currentLanguage = currentLanguage === "ar" ? "en" : "ar";
+      document.documentElement.setAttribute("lang", currentLanguage);
+    loadTimeline(); // إعادة تحميل الشريط الزمني
+    applyTranslations();
+    updateLanguageToggleText();
+    updateBodyDirection();
+  // تحديث أسماء الفرق في القائمة المنسدلة
+}
+
+
+function applyTranslations() {
+    document.querySelectorAll("[data-key]").forEach(element => {
+        const key = element.getAttribute("data-key");
+        const translation = translations[currentLanguage][key];
+        if (translation) {
+            element.textContent = translation;
+        }
+    });
+    
+    document.querySelectorAll("[data-placeholder-key]").forEach(element => {
+        const key = element.getAttribute("data-placeholder-key");
+        const translation = translations[currentLanguage][key];
+        if (translation) {
+            element.setAttribute("placeholder", translation);
+        }
+    });
+}
+
+
+function updateLanguageToggleText() {
+    const toggleButton = document.getElementById("language-toggle");
+    toggleButton.textContent = currentLanguage === "ar" ? "English" : "العربية";
+}
+
+function updateBodyDirection() {
+    document.body.setAttribute("lang", currentLanguage);
+    document.body.style.direction = currentLanguage === "ar" ? "rtl" : "ltr";
+}
+
+// تطبيق النصوص عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+    applyTranslations();
+    updateBodyDirection();
+});
+
+const translations = {
+    ar: {
+        hilal_info: "معلومات الهلال",
+        support: "الدعم",
+        championships: "التتويجات",
+        competitions: "المسابقات",
+        team_matches: "المواجهات",
+        team_players: "الفريق الأول",
+        year_stats: "حسميات الدوري",
+        managers: "رؤساء النادي",
+        youtube_videos: "مقاطع التتويج",
+        hilal_map: "منصات الهلال",
+        world_cup: "كأس العالم",
+        privacy_policy: "سياسة الخصوصية",
+        about_us: "من نحن",
+        support_notes: "ملاحظات الدعم",
+       app_title: "تطبيق حالي الذوق",
+       welcome_message: "مرحبًا بك في تطبيقنا!",
+        welcome_description: "استمتع بالمعلومات والبيانات الحصرية حول تاريخ وإنجازات نادي الهلال.",
+        timer_message: "سيتم تسجيل خروجك بعد 10 ثوانٍ...",
+       register_title: "شاشة تسجيل الدخول",
+        user_name_label: "اسم المستخدم",
+        user_name_placeholder: "اسم المستخدم",
+        user_name_error: "الرجاء إدخال اسم مستخدم صحيح.",
+        user_email_label: "البريد الإلكتروني",
+        user_email_placeholder: "example@example.com",
+        user_email_error: "الرجاء إدخال بريد إلكتروني صحيح.",
+        register_button: "تسجيل",
+        twitter: "تويتر",
+        youtube: "يوتيوب",
+        telegram: "تيليجرام",
+        footer_text: "© جميع الحقوق محفوظة لحساب \"حالي الذوق\" - الإصدار الأول 2025"
+      
+    },
+    en: {
+        hilal_info: "Hilal Information",
+        support: "Support",
+        championships: "Championships",
+        competitions: "Competitions",
+        team_matches: "Matches",
+        team_players: "First Team",
+        year_stats: "League Stats",
+        managers: "Club Presidents",
+        youtube_videos: "Highlight Videos",
+        hilal_map: "Hilal Platforms",
+        world_cup: "World Cup",
+        privacy_policy: "Privacy Policy",
+        about_us: "About Us",
+        support_notes: "Support Notes",
+      app_title: "Sweet Taste App",
+        welcome_message: "Welcome to our app!",
+        welcome_description: "Enjoy exclusive information and data about Al Hilal's history and achievements.",
+        timer_message: "You will be logged out in 10 seconds...",
+        register_title: "Login Screen",
+        user_name_label: "Username",
+        user_name_placeholder: "Enter your username",
+        user_name_error: "Please enter a valid username.",
+        user_email_label: "Email Address",
+        user_email_placeholder: "example@example.com",
+        user_email_error: "Please enter a valid email address.",
+        register_button: "Register",
+       twitter: "Twitter",
+        youtube: "YouTube",
+        telegram: "Telegram",
+        footer_text: "© All rights reserved to \"Sweet Taste\" - Version 1.0 2025"
+    }
+};
+
 
 
 
@@ -446,37 +596,30 @@ function fetchDataFromSheet(sheetName, callback) {
 //============================================================================================================================================
 // دوال عرض التتويجات
 
-/**
- * دالة لفتح شاشة التتويجات
- */
+
+
 function openChampionships() {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = `
-        <h2>🏆 تتويجات البطولات النهائية</h2>
+        <h2 data-key="championships_title">🏆 ${currentLanguage === "ar" ? "تتويجات البطولات النهائية" : "Championship Titles"}</h2>
         <div class="dropdown-container">
             <select id="year-select" class="styled-dropdown">
-                <option value="" disabled selected>اختر السنة</option>
+                <option value="" disabled selected>${currentLanguage === "ar" ? "اختر السنة" : "Select Year"}</option>
             </select>
         </div>
         <div id="championships-data" class="cards-container"></div>
     `;
 
-    // جلب البيانات باستخدام الدالة العامة
     fetchDataFromSheet(SHEET_CHAMPIONSHIPS, (data) => {
         populateChampionshipYears(data); // ملء قائمة السنوات
     });
 }
 
-/**
- * دالة لملء قائمة السنوات
- * @param {Array} data - البيانات المستلمة من الشيت
- */
-// إصلاح عرض التتويجات
 function populateChampionshipYears(data) {
     const uniqueYears = [...new Set(data.map(row => row.Year))].sort();
     const yearSelect = document.getElementById("year-select");
 
-    yearSelect.innerHTML = `<option value="" disabled selected>اختر السنة</option>`;
+    yearSelect.innerHTML = `<option value="" disabled selected>${currentLanguage === "ar" ? "اختر السنة" : "Select Year"}</option>`;
     uniqueYears.forEach(year => {
         const option = document.createElement("option");
         option.value = year;
@@ -484,54 +627,52 @@ function populateChampionshipYears(data) {
         yearSelect.appendChild(option);
     });
 
-    // إضافة حدث عند تغيير السنة
     yearSelect.addEventListener("change", () => {
         const selectedYear = yearSelect.value;
         const filteredData = data.filter(row => row.Year === selectedYear);
         renderChampionships(filteredData);
     });
 }
-/**
- * دالة لعرض التتويجات في شكل بطاقات
- * @param {Array} data - البيانات المفلترة حسب السنة
- */
+
 function renderChampionships(data) {
     const dataContainer = document.getElementById("championships-data");
-    dataContainer.innerHTML = ""; // تنظيف البيانات القديمة
+    dataContainer.innerHTML = "";
 
     data.forEach(item => {
         const card = document.createElement("div");
         card.className = "championship-card";
+
         card.innerHTML = `
             <div class="card-rank">
-                رقم البطولة: <span class="rank-value">${item["Championship Rank"]}</span>
+                ${currentLanguage === "ar" ? "رقم البطولة" : "Championship No"}: 
+                <span class="rank-value">${item["Championship Rank"]}</span>
             </div>
-            <h3 class="card-title">${item["Name"]}</h3>
-            <img src="${item["Image URL"]}" alt="${item["Name"]}" class="championship-image">
+            <h3 class="card-title">${currentLanguage === "ar" ? item["Name"] : item["Name_en"]}</h3>
+            <img src="${item["Image URL"]}" alt="${currentLanguage === "ar" ? item["Name"] : item["Name_en"]}" class="championship-image">
             <div class="info-section">
                 <i class="fa fa-trophy"></i>
-                <span class="info-label">المباراة النهائية:</span>
-                <span class="info-value">${item["Final Match"]}</span>
+                <span class="info-label">${currentLanguage === "ar" ? "المباراة النهائية" : "Final Match"}:</span>
+                <span class="info-value">${currentLanguage === "ar" ? item["Final Match"] : item["Final_Match_en"]}</span>
             </div>
             <div class="info-section">
                 <i class="fa fa-calendar-alt"></i>
-                <span class="info-label">الموسم:</span>
+                <span class="info-label">${currentLanguage === "ar" ? "الموسم" : "Season"}:</span>
                 <span class="info-value">${item["Date"]}</span>
             </div>
             <div class="info-section">
                 <i class="fa fa-users"></i>
-                <span class="info-label">الفريق المهزوم:</span>
-                <span class="info-value">${item["Opponent"]}</span>
+                <span class="info-label">${currentLanguage === "ar" ? "الفريق المهزوم" : "Opponent"}:</span>
+                <span class="info-value">${currentLanguage === "ar" ? item["Opponent"] : item["Opponent_en"]}</span>
             </div>
             <div class="info-section">
                 <i class="fa fa-futbol"></i>
-                <span class="info-label">النتيجة:</span>
-                <span class="info-value">${item["Score"]}</span>
+                <span class="info-label">${currentLanguage === "ar" ? "النتيجة" : "Score"}:</span>
+                <span class="info-value">${currentLanguage === "ar" ? item["Score"] : item["Score_en"]}</span>
             </div>
             <div class="info-section">
                 <i class="fa fa-user"></i>
-                <span class="info-label">الكابتن:</span>
-                <span class="info-value">${item["captn"] || "غير متوفر"}</span>
+                <span class="info-label">${currentLanguage === "ar" ? "الكابتن" : "Captain"}:</span>
+                <span class="info-value">${currentLanguage === "ar" ? item["captn"] : item["captn_en"] || "Not Available"}</span>
             </div>
         `;
         dataContainer.appendChild(card);
@@ -566,6 +707,9 @@ function openTeamPlayers() {
 /**
  * دالة لعرض اللاعبين حسب الصفحة الحالية
  */
+/**
+ * دالة لعرض اللاعبين حسب اللغة المختارة
+ */
 function displayPlayers() {
     const playersContainer = document.getElementById("players-container");
     playersContainer.innerHTML = ""; // تنظيف المحتوى السابق
@@ -575,13 +719,18 @@ function displayPlayers() {
     const playersToDisplay = playersData.slice(start, end);
 
     playersToDisplay.forEach((player) => {
-        const positionIcon = getPositionIcon(player['class']);
+        // اختيار الأعمدة بناءً على اللغة
+        const playerName = currentLanguage === "ar" ? player['neam'] : player['name_en'];
+        const playerClass = currentLanguage === "ar" ? player['class'] : player['class_en'];
+        const positionIcon = getPositionIcon(playerClass);
+
+        // إنشاء بطاقة اللاعب
         const playerCard = `
             <div class="player-card">
                 <div class="player-number left">#${player['player_number']}</div>
-                <img src="${player['Image URL']}" alt="${player['neam']}" class="player-image">
-                <div class="player-name">${player['neam']}</div>
-                <div class="player-position">${positionIcon} ${player['class']}</div>
+                <img src="${player['Image URL']}" alt="${playerName}" class="player-image">
+                <div class="player-name">${playerName}</div>
+                <div class="player-position">${positionIcon} ${playerClass}</div>
             </div>
         `;
         playersContainer.innerHTML += playerCard;
@@ -629,29 +778,29 @@ function prevPage() {
 function openTeamMatches() {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = `
-        <h2 id="team-matches-title">⚽ مواجهات الهلال</h2>
+        <h2 id="team-matches-title" data-key="team_matches_title">${currentLanguage === "ar" ? "مواجهات الهلال في الدوري ⚽" : "Al-Hilal League Matches ⚽"}</h2>
         <select id="team-select" class="styled-dropdown" onchange="fetchTeamMatchesData()">
-            <option value="">-- اختر الفريق --</option>
+            <option value="">${currentLanguage === "ar" ? "اختر الفريق" : "Select Team"}</option>
         </select>
         <div id="team-stats" class="team-stats-container"></div>
         <table id="team-stats-table" class="hidden">
             <thead>
                 <tr>
-                    <th>السنة</th>
-                    <th>الدور</th>
-                    <th>الهلال</th>
-                    <th>المنافس</th>
-                    <th>النتيجة</th>
-                    <th>الفائز</th>
+                    <th data-key="year">${currentLanguage === "ar" ? "السنة" : "Year"}</th>
+                    <th data-key="round">${currentLanguage === "ar" ? "الدور" : "Round"}</th>
+                    <th data-key="team1">${currentLanguage === "ar" ? "الهلال" : "Al-Hilal"}</th>
+                    <th data-key="team2">${currentLanguage === "ar" ? "المنافس" : "Opponent"}</th>
+                    <th data-key="score">${currentLanguage === "ar" ? "النتيجة" : "Score"}</th>
+                    <th data-key="winner">${currentLanguage === "ar" ? "الفائز" : "Winner"}</th>
                 </tr>
             </thead>
             <tbody id="team-stats-tbody"></tbody>
         </table>
         <div id="team-matches-stats" class="hidden">
-            <button class="team-filter-btn all" onclick="fetchTeamMatchesData()">الكل</button>
-            <button class="team-filter-btn wins" onclick="filterMatches('win')">الانتصارات</button>
-            <button class="team-filter-btn losses" onclick="filterMatches('loss')">الخسائر</button>
-            <button class="team-filter-btn draws" onclick="filterMatches('draw')">التعادلات</button>
+            <button class="team-filter-btn all" onclick="fetchTeamMatchesData()">${currentLanguage === "ar" ? "الكل" : "All"}</button>
+            <button class="team-filter-btn wins" onclick="filterMatches('win')">${currentLanguage === "ar" ? "الانتصارات" : "Wins"}</button>
+            <button class="team-filter-btn losses" onclick="filterMatches('loss')">${currentLanguage === "ar" ? "الخسائر" : "Losses"}</button>
+            <button class="team-filter-btn draws" onclick="filterMatches('draw')">${currentLanguage === "ar" ? "التعادلات" : "Draws"}</button>
         </div>
     `;
 
@@ -663,11 +812,17 @@ function openTeamMatches() {
     fetchDataFromSheet(SHEET_PAST_GAMES, populateTeamNames);
 }
 
-
 function populateTeamNames(data) {
-    const teams = [...new Set(data.flatMap(game => [game.Team1, game.Team2]).filter(team => team.trim() !== ""))];
+    const teams = [...new Set(
+        data.flatMap(game => 
+            currentLanguage === "ar" 
+            ? [game.Team1, game.Team2]
+            : [game.Team1_en, game.Team2_en]
+        ).filter(team => team && team.trim() !== "")
+    )];
+
     const teamSelect = document.getElementById("team-select");
-    teamSelect.innerHTML = '<option value="">-- اختر الفريق --</option>';
+    teamSelect.innerHTML = `<option value="">${currentLanguage === "ar" ? "-- اختر الفريق --" : "-- Select Team --"}</option>`;
 
     const teamIcon = "⚽"; // أيقونة عامة للفريق
 
@@ -678,8 +833,6 @@ function populateTeamNames(data) {
         teamSelect.appendChild(option);
     });
 }
-
-// دالة لجلب بيانات المواجهات وعرضها
 // دالة لجلب بيانات المواجهات
 function fetchTeamMatchesData() {
     const selectedTeam = document.getElementById("team-select").value;
@@ -692,16 +845,24 @@ function fetchTeamMatchesData() {
     }
 
     fetchDataFromSheet(SHEET_PAST_GAMES, (data) => {
-        const matches = data.filter(game => game.Team1 === selectedTeam || game.Team2 === selectedTeam);
+        // فلترة البيانات بناءً على اللغة الحالية
+        const matches = data.filter(game => {
+            if (currentLanguage === "ar") {
+                return game.Team1 === selectedTeam || game.Team2 === selectedTeam;
+            } else {
+                return game.Team1_en === selectedTeam || game.Team2_en === selectedTeam;
+            }
+        });
+
+        // عرض النتائج
         displayTeamMatches(matches);
         updateTeamStats(matches, selectedTeam);
 
-        // إظهار الجدول والأزرار بعد اختيار فريق
+        // إظهار الجدول والأزرار
         document.getElementById("team-stats-table").classList.remove("hidden");
         document.getElementById("team-matches-stats").classList.remove("hidden");
     });
 }
-
 // دالة عرض المباريات في الجدول
 function displayTeamMatches(matches) {
     const tableBody = document.getElementById("team-stats-tbody");
@@ -709,102 +870,124 @@ function displayTeamMatches(matches) {
     matches.forEach(match => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            
-          
-            
             <td>${match.Year}</td>
-              <td>${match.Round}</td>
-              <td>${match.Team1}</td>
-                          <td>${match.Team2}</td>
-                                      <td>${match.Score1} - ${match.Score2}</td>
-                                                  <td>${match.Winner}</td>
-
-
-
-            
+            <td>${currentLanguage === "ar" ? match.Round : match.Round_en}</td>
+            <td>${currentLanguage === "ar" ? match.Team1 : match.Team1_en}</td>
+            <td>${currentLanguage === "ar" ? match.Team2 : match.Team2_en}</td>
+            <td>${match.Score1} - ${match.Score2}</td>
+            <td>${currentLanguage === "ar" ? match.Winner : match.Winner_en}</td>
         `;
         tableBody.appendChild(row);
     });
 }
-
 // دالة تحديث الإحصائيات
 function updateTeamStats(matches, team) {
     const statsContainer = document.getElementById("team-stats");
 
     const totalMatches = matches.length;
-    const wins = matches.filter(match => match.Winner === "الهلال").length;
+    const wins = matches.filter(match => match.Winner === (currentLanguage === "ar" ? "الهلال" : "Al-Hilal")).length;
     const losses = matches.filter(match => match.Winner === team).length;
-    const draws = matches.filter(match => match.Winner === "التعادل").length;
+    const draws = matches.filter(match => match.Winner === (currentLanguage === "ar" ? "التعادل" : "Draw")).length;
 
     statsContainer.innerHTML = `
         <div class="team-stat-card">
-            <i class="fa fa-futbol"></i><h3>المباريات</h3><p>${totalMatches}</p>
+            <i class="fa fa-futbol"></i><h3>${currentLanguage === "ar" ? "المباريات" : "Matches"}</h3><p>${totalMatches}</p>
         </div>
         <div class="team-stat-card">
-            <i class="fa fa-trophy"></i><h3>الانتصارات</h3><p>${wins}</p>
+            <i class="fa fa-trophy"></i><h3>${currentLanguage === "ar" ? "الانتصارات" : "Wins"}</h3><p>${wins}</p>
         </div>
         <div class="team-stat-card">
-            <i class="fa fa-times-circle"></i><h3>الخسائر</h3><p>${losses}</p>
+            <i class="fa fa-times-circle"></i><h3>${currentLanguage === "ar" ? "الخسائر" : "Losses"}</h3><p>${losses}</p>
         </div>
         <div class="team-stat-card">
-            <i class="fa fa-handshake"></i><h3>التعادلات</h3><p>${draws}</p>
+            <i class="fa fa-handshake"></i><h3>${currentLanguage === "ar" ? "التعادلات" : "Draws"}</h3><p>${draws}</p>
         </div>
     `;
 }
-
 // دالة تصفية المباريات
 function filterMatches(filterType) {
     const selectedTeam = document.getElementById("team-select").value;
     if (!selectedTeam) return;
 
+    // جلب البيانات بناءً على الفريق المختار
     fetchDataFromSheet(SHEET_PAST_GAMES, (data) => {
-        let matches = data.filter(game => game.Team1 === selectedTeam || game.Team2 === selectedTeam);
+        // فلترة البيانات حسب الفريق المختار
+        let matches = data.filter(game => {
+            return currentLanguage === "ar"
+                ? (game.Team1 === selectedTeam || game.Team2 === selectedTeam)
+                : (game.Team1_en === selectedTeam || game.Team2_en === selectedTeam);
+        });
 
-        if (filterType === "win") matches = matches.filter(game => game.Winner === "الهلال");
-        if (filterType === "loss") matches = matches.filter(game => game.Winner === selectedTeam);
-        if (filterType === "draw") matches = matches.filter(game => game.Winner === "التعادل");
+        // تطبيق الفلترة حسب النوع (فوز، خسارة، تعادل)
+        matches = matches.filter(game => {
+            if (filterType === "win") {
+                return currentLanguage === "ar"
+                    ? game.Winner === "الهلال"
+                    : game.Winner_en === "Al-Hilal";
+            } else if (filterType === "loss") {
+                return currentLanguage === "ar"
+                    ? game.Winner !== "الهلال" && game.Winner !== "التعادل"
+                    : game.Winner_en !== "Al-Hilal" && game.Winner_en !== "Draw";
+            } else if (filterType === "draw") {
+                return currentLanguage === "ar"
+                    ? game.Winner === "التعادل"
+                    : game.Winner_en === "Draw";
+            }
+            return true; // "الكل"
+        });
 
+        // عرض النتائج بعد التصفية
         displayTeamMatches(matches);
         updateTeamStats(matches, selectedTeam);
     });
 }
+
 //============================================================================================================================================
 
 // دالة فتح قسم "حسميات الدوري"
 function openYearStats() {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = `
-        <h2 id="year-stats-title">📊 إحصائيات حسميات الدوري</h2>
+        <h2 id="year-stats-title" data-key="year_stats_title">
+            ${currentLanguage === "ar" ? "📊 إحصائيات حسميات الدوري" : "📊 League Decisive Stats"}
+        </h2>
         <label for="year-stats-select" class="styled-dropdown-label">
-            <span>اختر السنة</span>
+            <span>${currentLanguage === "ar" ? "اختر السنة" : "Select Year"}</span>
         </label>
         <select id="year-stats-select" class="styled-dropdown" onchange="fetchYearStatsData()">
-            <option value="">-- اختر السنة --</option>
+            <option value="">${currentLanguage === "ar" ? "-- اختر السنة --" : "-- Select Year --"}</option>
         </select>
         <div id="year-stats" class="team-stats-container hidden"></div>
         <table id="year-stats-table" class="hidden">
             <thead>
                 <tr>
-                    <th>رقم المباراة</th>
-                    <th>السنة</th>
-                    <th>الدور</th>
-                    <th>الهلال</th>
-                    <th>المنافس</th>
-                    <th>النتيجة</th>
-                    <th>الفائز</th>
+                    <th>${currentLanguage === "ar" ? "رقم المباراة" : "Match Number"}</th>
+                    <th>${currentLanguage === "ar" ? "السنة" : "Year"}</th>
+                    <th>${currentLanguage === "ar" ? "الدور" : "Round"}</th>
+                    <th>${currentLanguage === "ar" ? "الهلال" : "Al-Hilal"}</th>
+                    <th>${currentLanguage === "ar" ? "المنافس" : "Opponent"}</th>
+                    <th>${currentLanguage === "ar" ? "النتيجة" : "Score"}</th>
+                    <th>${currentLanguage === "ar" ? "الفائز" : "Winner"}</th>
                 </tr>
             </thead>
             <tbody id="year-stats-tbody"></tbody>
         </table>
         <div id="year-matches-stats" class="hidden">
-            <button class="team-filter-btn all" onclick="fetchYearStatsData()">الكل</button>
-            <button class="team-filter-btn wins" onclick="filterYearMatches('win')">الانتصارات</button>
-            <button class="team-filter-btn losses" onclick="filterYearMatches('loss')">الخسائر</button>
-            <button class="team-filter-btn draws" onclick="filterYearMatches('draw')">التعادلات</button>
+            <button class="team-filter-btn all" onclick="fetchYearStatsData()">
+                ${currentLanguage === "ar" ? "الكل" : "All"}
+            </button>
+            <button class="team-filter-btn wins" onclick="filterYearMatches('win')">
+                ${currentLanguage === "ar" ? "الانتصارات" : "Wins"}
+            </button>
+            <button class="team-filter-btn losses" onclick="filterYearMatches('loss')">
+                ${currentLanguage === "ar" ? "الخسائر" : "Losses"}
+            </button>
+            <button class="team-filter-btn draws" onclick="filterYearMatches('draw')">
+                ${currentLanguage === "ar" ? "التعادلات" : "Draws"}
+            </button>
         </div>
     `;
 
-    // تحميل قائمة السنوات من Google Sheets
     fetchDataFromSheet(SHEET_PAST_GAMES, populateYearsDropdown);
 }
 
@@ -813,7 +996,7 @@ function populateYearsDropdown(data) {
     const years = [...new Set(data.map(game => game.Year))].sort();
     const yearSelect = document.getElementById("year-stats-select");
 
-    yearSelect.innerHTML = '<option value="">-- اختر السنة --</option>';
+    yearSelect.innerHTML = `<option value="">${currentLanguage === "ar" ? "-- اختر السنة --" : "-- Select Year --"}</option>`;
     years.forEach(year => {
         const option = document.createElement("option");
         option.value = year;
@@ -843,6 +1026,7 @@ function fetchYearStatsData() {
     });
 }
 
+
 // دالة لعرض المباريات
 function displayYearMatches(matches) {
     const tableBody = document.getElementById("year-stats-tbody");
@@ -852,11 +1036,11 @@ function displayYearMatches(matches) {
         row.innerHTML = `
             <td>${match.Index}</td>
             <td>${match.Year}</td>
-            <td>${match.Round}</td>
-            <td>${match.Team1}</td>
-            <td>${match.Team2}</td>
+            <td>${currentLanguage === "ar" ? match.Round : match.Round_en}</td>
+            <td>${currentLanguage === "ar" ? match.Team1 : match.Team1_en}</td>
+            <td>${currentLanguage === "ar" ? match.Team2 : match.Team2_en}</td>
             <td>${match.Score1} - ${match.Score2}</td>
-            <td>${match.Winner}</td>
+            <td>${currentLanguage === "ar" ? match.Winner : match.Winner_en}</td>
         `;
         tableBody.appendChild(row);
     });
@@ -865,23 +1049,28 @@ function displayYearMatches(matches) {
 // دالة تحديث الإحصائيات
 function updateYearStats(matches) {
     const statsContainer = document.getElementById("year-stats");
+
     const totalMatches = matches.length;
-    const wins = matches.filter(match => match.Winner === "الهلال").length;
-    const losses = matches.filter(match => match.Winner !== "الهلال" && match.Winner !== "التعادل").length;
-    const draws = matches.filter(match => match.Winner === "التعادل").length;
+    const wins = matches.filter(match => match.Winner === (currentLanguage === "ar" ? "الهلال" : "Al-Hilal")).length;
+    const losses = matches.filter(match => {
+        return currentLanguage === "ar"
+            ? match.Winner !== "الهلال" && match.Winner !== "التعادل"
+            : match.Winner_en !== "Al-Hilal" && match.Winner_en !== "Draw";
+    }).length;
+    const draws = matches.filter(match => match.Winner === (currentLanguage === "ar" ? "التعادل" : "Draw")).length;
 
     statsContainer.innerHTML = `
         <div class="team-stat-card">
-            <i class="fa fa-futbol"></i><h3>المباريات</h3><p>${totalMatches}</p>
+            <i class="fa fa-futbol"></i><h3>${currentLanguage === "ar" ? "المباريات" : "Matches"}</h3><p>${totalMatches}</p>
         </div>
         <div class="team-stat-card">
-            <i class="fa fa-trophy"></i><h3>الانتصارات</h3><p>${wins}</p>
+            <i class="fa fa-trophy"></i><h3>${currentLanguage === "ar" ? "الانتصارات" : "Wins"}</h3><p>${wins}</p>
         </div>
         <div class="team-stat-card">
-            <i class="fa fa-times-circle"></i><h3>الخسائر</h3><p>${losses}</p>
+            <i class="fa fa-times-circle"></i><h3>${currentLanguage === "ar" ? "الخسائر" : "Losses"}</h3><p>${losses}</p>
         </div>
         <div class="team-stat-card">
-            <i class="fa fa-handshake"></i><h3>التعادلات</h3><p>${draws}</p>
+            <i class="fa fa-handshake"></i><h3>${currentLanguage === "ar" ? "التعادلات" : "Draws"}</h3><p>${draws}</p>
         </div>
     `;
 }
@@ -894,9 +1083,15 @@ function filterYearMatches(filterType) {
     fetchDataFromSheet(SHEET_PAST_GAMES, (data) => {
         let matches = data.filter(game => game.Year === selectedYear);
 
-        if (filterType === "win") matches = matches.filter(game => game.Winner === "الهلال");
-        if (filterType === "loss") matches = matches.filter(game => game.Winner !== "الهلال" && game.Winner !== "التعادل");
-        if (filterType === "draw") matches = matches.filter(game => game.Winner === "التعادل");
+        if (filterType === "win") {
+            matches = matches.filter(game => currentLanguage === "ar" ? game.Winner === "الهلال" : game.Winner_en === "Al-Hilal");
+        } else if (filterType === "loss") {
+            matches = matches.filter(game => currentLanguage === "ar" 
+                ? game.Winner !== "الهلال" && game.Winner !== "التعادل"
+                : game.Winner_en !== "Al-Hilal" && game.Winner_en !== "Draw");
+        } else if (filterType === "draw") {
+            matches = matches.filter(game => currentLanguage === "ar" ? game.Winner === "التعادل" : game.Winner_en === "Draw");
+        }
 
         displayYearMatches(matches);
         updateYearStats(matches);
@@ -941,20 +1136,26 @@ function openManagers() {
         }
     });
 }
+
+// دالة عرض المدير الحالي
 function displayManager(index) {
     const manager = managers[index];
+
+    // اختيار اللغة بناءً على اللغة الحالية
+    const nameField = currentLanguage === "ar" ? "mangertName" : "mangertName_en";
+    const winsField = currentLanguage === "ar" ? "win" : "win_en";
 
     const formattedYears = manager.years
         .split(",")
         .map(year => `<span class="highlight year">${year.trim()}</span>`)
         .join("<br>");
 
-    const formattedWins = manager.win
-        ? manager.win
+    const formattedWins = manager[winsField]
+        ? manager[winsField]
               .split(",")
               .map(win => `<span class="highlight win">${win.trim()}</span>`)
               .join("<br>")
-        : "<span class='no-data'>لا توجد بطولات</span>";
+        : "<span class='no-data'>No Championships</span>";
 
     const totalYears = manager.years
         .split(",")
@@ -966,7 +1167,9 @@ function displayManager(index) {
     document.getElementById("managers-container").innerHTML = `
         <!-- العنوان -->
         <h2 class="managers-title">
-            <i class="fa fa-crown icon"></i> رؤساء المجد لنادي الهلال
+            <i class="fa fa-crown icon"></i> ${
+                currentLanguage === "ar" ? "رؤساء المجد لنادي الهلال" : "The Glory Presidents of Al Hilal Club"
+            }
         </h2>
         
         <div class="manager-container">
@@ -974,8 +1177,8 @@ function displayManager(index) {
             <div class="manager-main-card">
                 <div class="manager-number">#${manager.no}</div>
                 <div class="manager-header">
-                    <img class="manager-image" src="${manager.ImageURL}" alt="${manager.mangertName}">
-                    <h3 class="manager-name">${manager.mangertName}</h3>
+                    <img class="manager-image" src="${manager.ImageURL}" alt="${manager[nameField]}">
+                    <h3 class="manager-name">${manager[nameField]}</h3>
                 </div>
             </div>
 
@@ -983,33 +1186,38 @@ function displayManager(index) {
             <div class="manager-stats-row">
                 <div class="stat-card">
                     <i class="fa fa-calendar-alt icon"></i>
-                    <h4>الفترة الزمنية</h4>
+                    <h4>${currentLanguage === "ar" ? "الفترة الزمنية" : "Tenure Periods"}</h4>
                     <p>${formattedYears}</p>
                 </div>
                 <div class="stat-card">
                     <i class="fa fa-trophy icon"></i>
-                    <h4>البطولات</h4>
+                    <h4>${currentLanguage === "ar" ? "البطولات" : "Championships"}</h4>
                     <p>${formattedWins}</p>
                 </div>
                 <div class="stat-card">
                     <i class="fa fa-chart-bar icon"></i>
-                    <h4>الإحصائيات</h4>
+                    <h4>${currentLanguage === "ar" ? "الإحصائيات" : "Statistics"}</h4>
                     <p>
-                        إجمالي السنوات: <span class="highlight stat">${totalYears}</span> سنة<br>
-                        إجمالي البطولات: <span class="highlight stat">${manager.milestoneCount || 0}</span> بطولة
+                        ${currentLanguage === "ar" ? "إجمالي السنوات" : "Total Years"}: 
+                        <span class="highlight stat">${totalYears}</span> ${currentLanguage === "ar" ? "سنة" : "years"}<br>
+                        ${currentLanguage === "ar" ? "إجمالي البطولات" : "Total Championships"}: 
+                        <span class="highlight stat">${manager.milestoneCount || 0}</span>
                     </p>
                 </div>
             </div>
 
             <!-- أزرار التنقل -->
             <div class="navigation-buttons">
-                <button onclick="prevManager()">السابق</button>
-                <button onclick="nextManager()">التالي</button>
+                <button onclick="prevManager()">
+                    ${currentLanguage === "ar" ? "السابق" : "Previous"}
+                </button>
+                <button onclick="nextManager()">
+                    ${currentLanguage === "ar" ? "التالي" : "Next"}
+                </button>
             </div>
         </div>
     `;
 }
-
 
 // دالة للانتقال إلى المدير السابق
 function prevManager() {
@@ -1026,7 +1234,9 @@ function nextManager() {
         displayManager(currentManagerIndex);
     }
 }
+
 //============================================================================================================================================
+// عدد الفيديوهات لكل صفحة
 // عدد الفيديوهات لكل صفحة
 const videosPerPage = 4;
 let currentPage = 1;
@@ -1039,7 +1249,7 @@ function openYouTubeVideos() {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = `
         <h2 class="videos-title">
-            <i class="fa fa-play-circle"></i> مقاطع التتويج
+            <i class="fa fa-play-circle"></i> ${currentLanguage === "ar" ? "مقاطع التتويج" : "Championship Videos"}
         </h2>
         <div id="youtube-videos" class="youtube-videos-grid"></div>
         <div id="pagination" class="pagination-controls"></div>
@@ -1070,7 +1280,7 @@ function displayVideos() {
 
         const videoTitle = document.createElement("p");
         videoTitle.classList.add("video-title");
-        videoTitle.textContent = video.title || "عنوان غير متوفر";
+        videoTitle.textContent = currentLanguage === "ar" ? (video.title || "عنوان غير متوفر") : (video["title-en"] || "Title Not Available");
 
         const videoCard = document.createElement("div");
         videoCard.classList.add("video-card");
@@ -1092,7 +1302,7 @@ function displayPagination() {
 
     if (currentPage > 1) {
         const prevButton = document.createElement("button");
-        prevButton.textContent = "السابق";
+        prevButton.textContent = currentLanguage === "ar" ? "السابق" : "Previous";
         prevButton.className = "pagination-button";
         prevButton.onclick = () => {
             currentPage--;
@@ -1102,13 +1312,13 @@ function displayPagination() {
     }
 
     const pageNumber = document.createElement("span");
-    pageNumber.textContent = `الصفحة ${currentPage} من ${totalPages}`;
+    pageNumber.textContent = `${currentLanguage === "ar" ? "الصفحة" : "Page"} ${currentPage} ${currentLanguage === "ar" ? "من" : "of"} ${totalPages}`;
     pageNumber.className = "page-number";
     paginationContainer.appendChild(pageNumber);
 
     if (currentPage < totalPages) {
         const nextButton = document.createElement("button");
-        nextButton.textContent = "التالي";
+        nextButton.textContent = currentLanguage === "ar" ? "التالي" : "Next";
         nextButton.className = "pagination-button";
         nextButton.onclick = () => {
             currentPage++;
@@ -1117,6 +1327,7 @@ function displayPagination() {
         paginationContainer.appendChild(nextButton);
     }
 }
+
 //============================================================================================================================================
 function openWorldCup() {
     // العنصر الرئيسي الذي يحتوي على المحتوى
@@ -1196,13 +1407,19 @@ function openWorldCupDetails(year) {
 }
 
 //============================================================================================================================================
+let map; // مرجع الخريطة
+let currentLayer; // الطبقة الحالية
+
+
 function openHilalMap() {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = `
-        <h2 id="map-title" style="text-align: center; margin-bottom: 20px;">🌍 منصات الهلال</h2>
+        <h2 id="map-title" style="text-align: center; margin-bottom: 20px;">
+            🌍 ${currentLanguage === "ar" ? "منصات الهلال" : "Al-Hilal Platforms"}
+        </h2>
         <div id="map-container" style="height: 500px; width: 70%; margin: 0 auto; border-radius: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); border: 3px solid #005fbf;"></div>
         <div id="regions-bar" style="
-            display: flex; 
+        position: absolute; 
             flex-wrap: wrap; 
             justify-content: center; 
             align-items: center; 
@@ -1223,18 +1440,33 @@ function openHilalMap() {
             border-radius: 5px; 
             cursor: pointer;
             font-weight: bold;">
-            <i class="fa fa-map"></i> إعادة تعيين الخريطة
+            <i class="fa fa-map"></i> ${currentLanguage === "ar" ? "إعادة تعيين الخريطة" : "Reset Map"}
         </button>
     `;
 
     const map = L.map('map-container').setView([24.774265, 46.738586], 6);
 
-    // إضافة طبقة الخريطة
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    // طبقات الخريطة (العربية والإنجليزية)
+    const arabicLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    });
 
-    // إعداد الدوائر التجميعية باللون الأزرق
+    const englishLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    });
+
+    // إضافة الطبقة الحالية بناءً على اللغة
+    let currentLayer = currentLanguage === "ar" ? arabicLayer : englishLayer;
+    currentLayer.addTo(map);
+
+    // تغيير الطبقة عند تبديل اللغة
+    document.documentElement.addEventListener('langChange', () => {
+        map.removeLayer(currentLayer);
+        currentLayer = currentLanguage === "ar" ? arabicLayer : englishLayer;
+        currentLayer.addTo(map);
+    });
+
+    // تعريف markers (مجموعة العلامات)
     const markers = L.markerClusterGroup({
         iconCreateFunction: (cluster) => {
             const count = cluster.getChildCount();
@@ -1258,16 +1490,14 @@ function openHilalMap() {
 
     const regionsBar = document.getElementById("regions-bar");
 
-    // تحميل البيانات من Google Sheets
     fetchDataFromSheet("MAPS", (data) => {
         const regions = {};
 
-        // معالجة البيانات
         data.forEach(row => {
             const coordinates = row.coordinates.split(',').map(coord => parseFloat(coord.trim()));
-            const region = row.Location || "غير محدد"; // المنطقة
-            const stadium = row.Stadium;
-            const tournament = row.Name;
+            const region = currentLanguage === "ar" ? (row.Location || "غير محدد") : (row["Location-en"] || "Not Specified");
+            const stadium = currentLanguage === "ar" ? row.Stadium : row["Stadium-en"];
+            const tournament = currentLanguage === "ar" ? row.Name : row["Name-en"];
             const year = row.Year;
 
             if (!regions[region]) {
@@ -1280,15 +1510,18 @@ function openHilalMap() {
             regions[region].stadiums.push({ stadium, tournament, year, coordinates });
         });
 
-        // إضافة العلامات (Markers) إلى الخريطة
         Object.keys(regions).forEach(region => {
             const { coordinates, stadiums } = regions[region];
 
             stadiums.forEach(({ stadium, tournament, year }) => {
                 const popupContent = `
                     <div style="text-align: center; padding: 10px;">
-                        <h3 style="margin-bottom: 10px; color: #005fbf;">${stadium}</h3>
-                        <p style="font-size: 1rem; color: #005fbf;">البطولة: ${tournament} (${year})</p>
+                        <h3 style="margin-bottom: 10px; color: #005fbf;">
+                            ${stadium}
+                        </h3>
+                        <p style="font-size: 1rem; color: #005fbf;">
+                            ${currentLanguage === "ar" ? "البطولة" : "Tournament"}: ${tournament} (${year})
+                        </p>
                     </div>
                 `;
                 const marker = L.marker(coordinates, {
@@ -1302,7 +1535,6 @@ function openHilalMap() {
                 markers.addLayer(marker);
             });
 
-            // إضافة المنطقة إلى الشريط السفلي
             const regionItem = document.createElement("div");
             regionItem.style = `
                 display: inline-flex; 
@@ -1317,14 +1549,14 @@ function openHilalMap() {
                 transition: transform 0.3s ease;
             `;
             regionItem.innerHTML = `
-                <span style="margin-right: 5px;">🏆</span> <!-- أيقونة الكأس -->
+                <span style="margin-right: 5px;">🏆</span>
                 <span>${region}</span>
                 <span style="background-color:#52159e; color: white; padding: 5px 10px; margin-left: 10px; border-radius: 5px;">
                     ${stadiums.length}
                 </span>
             `;
             regionItem.addEventListener("click", () => {
-                map.setView(coordinates, 10); // الانتقال مباشرة إلى الموقع
+                map.setView(coordinates, 10);
             });
             regionItem.addEventListener("mouseover", () => {
                 regionItem.style.transform = "scale(1.1)";
@@ -1338,12 +1570,10 @@ function openHilalMap() {
 
         map.addLayer(markers);
 
-        // زر إعادة تعيين الخريطة
         document.getElementById('reset-map').addEventListener('click', () => {
             map.setView([24.774265, 46.738586], 6);
         });
 
-        // تحديث أبعاد الخريطة بعد التحميل
         setTimeout(() => {
             map.invalidateSize();
         }, 200);
@@ -1351,77 +1581,81 @@ function openHilalMap() {
 }
 
 //============================================================================================================================================
-
-
-
 let timelineData = "";
 
 // إعداد الشريط الزمني
-fetchDataFromSheet("today-event", (todayEvents) => {
+function loadTimeline() {
+    timelineData = ""; // إعادة تعيين البيانات
     const currentMonth = new Date().getMonth() + 1;
-    const currentMonthEvents = todayEvents.filter(event => {
-        const eventDateParts = event.date.split("/");
-        const eventMonth = parseInt(eventDateParts[1]);
-        return eventMonth === currentMonth;
-    });
 
     // 1. رابط التليجرام
     timelineData += `
         <span style="display: inline-block; margin-right: 50px;">
             <a href="https://t.me/AlHilalFansChannel" target="_blank"
                 style="color: #fff; text-decoration: none; font-weight: bold;">
-                📱 اشترك في قناة تيليجرام للحصول على كل جديد
+                ${currentLanguage === "ar" ? "📱 اشترك في قناة تيليجرام للحصول على كل جديد" : "📱 Subscribe to the Telegram channel for updates"}
             </a>
         </span>
     `;
 
-    // 2. آخر مباراة
-    fetchDataFromSheet("pastGames", (pastGames) => {
-        if (pastGames.length > 0) {
-            const lastGame = pastGames[pastGames.length - 1];
-            timelineData += `
-                <span style="display: inline-block; margin-right: 50px;">
-                    ⚽ <span style="color:#FFA500; font-weight:bold;">آخر مباراة:</span>
-                    <span style="color:#fff; font-weight:bold;">${lastGame.Team1}</span>
-                    <span style="color:#FFD700; font-weight:bold;">(${lastGame.Score1}-${lastGame.Score2})</span>
-                    <span style="color:#fff; font-weight:bold;">${lastGame.Team2}</span>
-                </span>
-            `;
-        } else {
-            timelineData += `
-                <span style="display: inline-block; margin-right: 50px;">
-                    ⚽ <span style="color:#FFA500; font-weight:bold;">آخر مباراة:</span>
-                    <span style="color:#fff;">لا توجد مباريات مسجلة</span>
-                </span>
-            `;
-        }
+    // جلب بيانات الأحداث
+    fetchDataFromSheet("today-event", (todayEvents) => {
+        const currentMonthEvents = todayEvents.filter(event => {
+            const eventDateParts = event.date.split("/");
+            const eventMonth = parseInt(eventDateParts[1]);
+            return eventMonth === currentMonth;
+        });
 
-        // 3. بطولات هذا الشهر
-        if (currentMonthEvents.length > 0) {
-            const eventsText = currentMonthEvents.map(event => `
-                🏆 <span style="color:#FFD700; font-weight:bold;">${event.title}</span>
-                (<span style="color:#fff;">${event.year}</span>)
-            `).join(" | ");
-            timelineData += `
-                <span style="display: inline-block; margin-right: 50px;">
-                    📅 <span style="color:#FFA500; font-weight:bold;">بطولات هذا الشهر:</span> ${eventsText}
-                </span>
-            `;
-        } else {
-            timelineData += `
-                <span style="display: inline-block; margin-right: 50px;">
-                    📅 <span style="color:#FFA500; font-weight:bold;">بطولات هذا الشهر:</span>
-                    <span style="color:#fff;">لا توجد بطولات لهذا الشهر</span>
-                </span>
-            `;
-        }
+        // 2. آخر مباراة
+        fetchDataFromSheet("pastGames", (pastGames) => {
+            if (pastGames.length > 0) {
+                const lastGame = pastGames[pastGames.length - 1];
+                timelineData += `
+                    <span style="display: inline-block; margin-right: 50px;">
+                        ⚽ <span style="color:#FFA500; font-weight:bold;">${currentLanguage === "ar" ? "آخر مباراة:" : "Last Match:"}</span>
+                        <span style="color:#fff; font-weight:bold;">${currentLanguage === "ar" ? lastGame.Team1 : lastGame.Team1_en}</span>
+                        <span style="color:#FFD700; font-weight:bold;">(${lastGame.Score1}-${lastGame.Score2})</span>
+                        <span style="color:#fff; font-weight:bold;">${currentLanguage === "ar" ? lastGame.Team2 : lastGame.Team2_en}</span>
+                    </span>
+                `;
+            } else {
+                timelineData += `
+                    <span style="display: inline-block; margin-right: 50px;">
+                        ⚽ <span style="color:#FFA500; font-weight:bold;">${currentLanguage === "ar" ? "آخر مباراة:" : "Last Match:"}</span>
+                        <span style="color:#fff;">${currentLanguage === "ar" ? "لا توجد مباريات مسجلة" : "No recorded matches"}</span>
+                    </span>
+                `;
+            }
 
-        // تحديث الشريط الزمني
-        const timelineContainer = document.getElementById("timeline-container");
-        timelineContainer.innerHTML = timelineData;
-        timelineContainer.style.display = "block";
+            // 3. بطولات هذا الشهر
+            if (currentMonthEvents.length > 0) {
+                const eventsText = currentMonthEvents.map(event => `
+                    🏆 <span style="color:#FFD700; font-weight:bold;">${currentLanguage === "ar" ? event.title : event["title-en"]}</span>
+                    (<span style="color:#fff;">${event.year}</span>)
+                `).join(" | ");
+                timelineData += `
+                    <span style="display: inline-block; margin-right: 50px;">
+                        📅 <span style="color:#FFA500; font-weight:bold;">${currentLanguage === "ar" ? "بطولات هذا الشهر:" : "This Month's Championships:"}</span> ${eventsText}
+                    </span>
+                `;
+            } else {
+                timelineData += `
+                    <span style="display: inline-block; margin-right: 50px;">
+                        📅 <span style="color:#FFA500; font-weight:bold;">${currentLanguage === "ar" ? "بطولات هذا الشهر:" : "This Month's Championships:"}</span>
+                        <span style="color:#fff;">${currentLanguage === "ar" ? "لا توجد بطولات لهذا الشهر" : "No championships this month"}</span>
+                    </span>
+                `;
+            }
+
+            // تحديث الشريط الزمني
+            const timelineContainer = document.getElementById("timeline-container");
+            if (timelineContainer) {
+                timelineContainer.innerHTML = timelineData;
+                timelineContainer.style.display = "block";
+            }
+        });
     });
-});
+}
 
 // إضافة الشريط إلى DOM
 document.addEventListener("DOMContentLoaded", () => {
@@ -1430,18 +1664,19 @@ document.addEventListener("DOMContentLoaded", () => {
     timeline.id = "timeline-container";
     timeline.style = `
       display: fixed; 
-       top: 50px;
+        top: 50px;
         left: 0;
         width: 100%;
         color: white;
-        font-size: 1.2rem; /* تكبير النص */
+        font-size: 1.2rem;
         padding: 10px;
         white-space: nowrap;
-        overflow: auto;
-        animation: scroll 50s linear infinite; /* تقليل السرعة */
+        overflow: hidden;
+        animation: scroll 50s linear infinite;
     `;
-    timeline.innerHTML = "جاري تحميل البيانات...";
+    timeline.innerHTML = `${currentLanguage === "ar" ? "جاري تحميل البيانات..." : "Loading data..."}`;
     header.insertAdjacentElement("afterend", timeline);
+    loadTimeline(); // تحميل البيانات عند البداية
 });
 
 // حركة الشريط
@@ -1457,13 +1692,16 @@ style.innerHTML = `
     #timeline-container span {
         font-size: 1rem;
         font-weight: bold;
-        white-space: nowrap; /* منع الالتفاف */
+        white-space: nowrap;
     }
     #timeline-container span > span {
-        margin: 0 5px; /* إضافة مسافات بين العناصر داخل النص */
+        margin: 0 5px;
     }
 `;
 document.head.appendChild(style);
+
+
+
 
 
 function openContent(section) {
@@ -1501,3 +1739,18 @@ function openContent(section) {
         mainContent.style.display = "block"; // عرض القسم
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
