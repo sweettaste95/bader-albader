@@ -35,46 +35,55 @@
 
     <!-- الهيدر ---------------------------------------------------------------- -->
     <header class="header">
-    <h1 class="header-title" data-key="app_title">تطبيق حالي الذوق</h1>
- 
-  <img src="https://github.com/sweettaste95/hilal-images/blob/main/icon.png?raw=true" alt="لوغو التطبيق" class="logo">
+    <h1 class="header-title">تطبيق حالي الذوق</h1>
+      <div class="language-switcher">
    
+  <img src="https://github.com/sweettaste95/hilal-images/blob/main/icon.png?raw=true" alt="لوغو التطبيق" class="logo">
+        
+   </div>
+
+<!-- أزرار تغيير اللغة -->
+    <div class="language-switcher">
+        <button onclick="switchLanguage('ar')" data-key="change_language_ar">عربي</button>
+        <button onclick="switchLanguage('en')" data-key="change_language_en">English</button>
+    </div>
 
       
   <div id="overlay" class="overlay hidden"></div>
 
       
   <div class="header-actions">
-     <button id="language-toggle" class="language-button" onclick="toggleLanguage()">
-        English
-    </button>
     <button id="menu-toggle" class="hamburger" onclick="toggleMinibar()">☰</button>
-
     <button id="logout-btn" class="logout-button" onclick="logoutUser()">
         <i class="fas fa-sign-out-alt"></i>
         <span class="logout-text">تسجيل الخروج</span>
+   
+    </div>
     </button>
 
        
        
     </div>
 </header>
+
+  
       <!-- نهاية الهيدر ---------------------------------------------------------- -->
       <!-- الميني بار ----------------------------------------------------------- -->
+
 <div id="minibar" class="minibar">
     <!-- قسم معلومات الهلال -->
     <div class="minibar-section">
         <h3 class="minibar-section-title" data-key="hilal_info">معلومات الهلال</h3>
         <ul class="minibar-buttons">
-            <li><button data-content="championships" onclick="handleButtonClick(event)" data-key="championships">🏆 التتويجات</button></li>
-            <li><button data-content="competitions" onclick="handleButtonClick(event)" data-key="competitions">⭐ المسابقات</button></li>
-            <li><button data-content="team-matches" onclick="handleButtonClick(event)" data-key="team_matches">⚽ المواجهات</button></li>
-            <li><button data-content="team-players" onclick="handleButtonClick(event)" data-key="team_players">👥 الفريق الأول</button></li>
-            <li><button data-content="year-stats" onclick="handleButtonClick(event)" data-key="year_stats">📊 حسميات الدوري</button></li>
-            <li><button data-content="managers" onclick="handleButtonClick(event)" data-key="managers">👔 رؤساء النادي</button></li>
-            <li><button data-content="youtube-videos" onclick="handleButtonClick(event)" data-key="youtube_videos">📹 مقاطع التتويج</button></li>
-            <li><button data-content="hilal-map" onclick="handleButtonClick(event)" data-key="hilal_map">🗺️ منصات الهلال</button></li>
-            <li><button data-content="world-cup" onclick="handleButtonClick(event)" data-key="world_cup">🌍 كأس العالم</button></li>
+            <li><button data-content="championships" data-key="championships" onclick="handleButtonClick(event)">🏆 التتويجات</button></li>
+            <li><button data-content="competitions" data-key="competitions" onclick="handleButtonClick(event)">⭐ المسابقات</button></li>
+            <li><button data-content="team-matches" data-key="team_matches" onclick="handleButtonClick(event)">⚽ المواجهات</button></li>
+            <li><button data-content="team-players" data-key="team_players" onclick="handleButtonClick(event)">👥 الفريق الأول</button></li>
+            <li><button data-content="year-stats" data-key="year_stats" onclick="handleButtonClick(event)">📊 حسميات الدوري</button></li>
+            <li><button data-content="managers" data-key="managers" onclick="handleButtonClick(event)">👔 رؤساء النادي</button></li>
+            <li><button data-content="youtube-videos" data-key="youtube_videos" onclick="handleButtonClick(event)">📹 مقاطع التتويج</button></li>
+            <li><button data-content="hilal-map" data-key="hilal_map" onclick="handleButtonClick(event)">🗺️ منصات الهلال</button></li>
+            <li><button data-content="world-cup" data-key="world_cup" onclick="handleButtonClick(event)">🌍 كأس العالم</button></li>
         </ul>
     </div>
 
@@ -82,13 +91,15 @@
     <div class="minibar-section">
         <h3 class="minibar-section-title" data-key="support">الدعم</h3>
         <ul class="minibar-buttons">
-            <li><button onclick="openContent('سياسة الخصوصية')" data-key="privacy_policy">🛡️ سياسة الخصوصية</button></li>
-            <li><button onclick="openContent('من نحن')" data-key="about_us">📖 من نحن</button></li>
-            <li><button onclick="openContent('ملاحظات الدعم')" data-key="support_notes">📝 ملاحظات الدعم</button></li>
+<li>
+    <button data-content="privacy-policy" data-key="privacy_policy" onclick="handleButtonClick(event)">
+        🛡️ سياسة الخصوصية
+    </button>
+</li            <li><button data-content="about-us" data-key="about_us" onclick="openContent('من نحن')">📖 من نحن</button></li>
+            <li><button data-content="support-notes" data-key="support_notes" onclick="openContent('ملاحظات الدعم')">📝 ملاحظات الدعم</button></li>
         </ul>
     </div>
 </div>
-
 
     <!-- نهاية الميني بار ------------------------------------------------------ -->
 <div id="main-content" class="main-content"></div>
@@ -108,7 +119,7 @@
         </select>
     </div>
     <div id="championships-data" class="championships-container">
-        <!-- مثال لبطاقة -->ئ
+        <!-- مثال لبطاقة -->
         <div class="championship-card">
             <!-- رقم البطولة -->
             <div class="card-rank">
@@ -148,77 +159,61 @@
     <!-- نهاية المحتوى الرئيسي ------------------------------------------------- -->
 
     <!-- شاشة التسجيل ---------------------------------------------------------- -->
-   <div id="register-screen" class="screen" style="display: none;">
-    <h2 class="title" data-key="register_title">شاشة تسجيل الدخول</h2>
-    
+    <div id="register-screen" class="screen">
+    <h2 class="title">شاشة تسجيل الدخول</h2>
     <div class="form-group">
-        <label for="user-name" class="label" data-key="user_name_label">اسم المستخدم</label>
-        <input type="text" id="user-name" class="register-input" placeholder="اسم المستخدم" data-placeholder-key="user_name_placeholder">
-        <p id="user-name-error" class="error-message" data-key="user_name_error"></p>
+        <label for="user-name" class="label">اسم المستخدم</label>
+        <input type="text" id="user-name" class="register-input" placeholder="اسم المستخدم">
+        <p id="user-name-error" class="error-message"></p>
     </div>
-    
     <div class="form-group">
-        <label for="user-email" class="label" data-key="user_email_label">البريد الإلكتروني</label>
-        <input type="email" id="user-email" class="register-input" placeholder="example@example.com" data-placeholder-key="user_email_placeholder">
-        <p id="user-email-error" class="error-message" data-key="user_email_error"></p>
+        <label for="user-email" class="label">البريد الإلكتروني</label>
+        <input type="email" id="user-email" class="register-input" placeholder="example@example.com">
+        <p id="user-email-error" class="error-message"></p>
     </div>
-    
-    <button id="register-btn" class="register-button" onclick="registerUser()" data-key="register_button">
-        تسجيل
-    </button>
+    <button id="register-btn" class="register-button" onclick="registerUser()">تسجيل</button>
     
     <!-- إضافة اللوغو أسفل زر التسجيل -->
     <img src="https://github.com/sweettaste95/hilal-images/blob/main/icon.png?raw=true" alt="لوغو التطبيق" class="register-logo">
 </div>
-
 
     <!-- نهاية شاشة التسجيل --------------------------------------------------- -->
       
     <!-- شاشة الترحيب ---------------------------------------------------------- -->
  
     <div id="welcome-screen" class="screen" style="display: none;">
-    <div class="welcome-container">
-        <img id="welcome-image" src="https://github.com/sweettaste95/hilal-images/blob/main/signal-2024-11-09-085859.jpeg?raw=true" alt="مرحبًا بك" class="welcome-image">
-        <!-- عنوان الترحيب -->
-        <h1 id="welcome-message" class="welcome-title" data-key="welcome_message"></h1>
-        
-        <!-- وصف الترحيب -->
-        <p class="welcome-description" data-key="welcome_description">
-            استمتع بالمعلومات والبيانات الحصرية حول تاريخ وإنجازات نادي الهلال.
-        </p>
-        
-        <!-- مؤقت تسجيل الخروج -->
-        <div id="timer" class="timer" style="display: none;" data-key="timer_message">
-            سيتم تسجيل خروجك بعد 10 ثوانٍ...
+        <div class="welcome-container">
+            <img id="welcome-image" src="https://github.com/sweettaste95/hilal-images/blob/main/signal-2024-11-09-085859.jpeg?raw=true" alt="مرحبًا بك" class="welcome-image">
+            <h1 id="welcome-message" class="welcome-title"></h1>
+            <p class="welcome-description">استمتع بالمعلومات والبيانات الحصرية حول تاريخ وإنجازات نادي الهلال.</p>
+            <div id="timer" class="timer" style="display: none;">سيتم تسجيل خروجك بعد 10 ثوانٍ...</div>
         </div>
     </div>
-
 
      <!-- نهاية شاشة الترحيب --------------------------------------------------- -->
 
     <!-- الفوتر ---------------------------------------------------------------- --> 
       
-    <footer class="footer">
-    <div class="footer-links">
-        <a href="https://x.com/B_S_2000" target="_blank" class="footer-link">
-            <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" class="footer-icon">
-            <span data-key="twitter">تويتر</span>
-        </a>
-        <a href="https://www.youtube.com/channel/UC3YNG_VDR80fXDkyKssV3-Q/join" target="_blank" class="footer-link">
-            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="footer-icon">
-            <span data-key="youtube">يوتيوب</span>
-        </a>
-        <a href="https://t.me/AlHilalFansChannel" target="_blank" class="footer-link">
-            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" class="footer-icon">
-            <span data-key="telegram">تيليجرام</span>
-        </a>
-    </div>
-    <p class="footer-copyright">
-        <span data-key="footer_text">© جميع الحقوق محفوظة لحساب "حالي الذوق" - الإصدار الأول 2025</span>
+     <footer class="footer">
+        <div class="footer-links">
+            <a href="https://x.com/B_S_2000" target="_blank" class="footer-link">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" class="footer-icon">
+                تويتر
+            </a>
+            <a href="https://www.youtube.com/channel/UC3YNG_VDR80fXDkyKssV3-Q/join" target="_blank" class="footer-link">
+                <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="footer-icon">
+                يوتيوب
+            </a>
+            <a href="https://t.me/AlHilalFansChannel" target="_blank" class="footer-link">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" class="footer-icon">
+                تيليجرام
+            </a>
+        </div>
+        <p class="footer-copyright">
+        © جميع الحقوق محفوظة لحساب "حالي الذوق" - الإصدار الأول 2025
         <img src="https://github.com/sweettaste95/hilal-images/blob/main/icon.png?raw=true" alt="لوغو التطبيق" class="logo-footer-inline">
     </p>
 </footer>
-
 
     <script src="script.js"></script>
 </body>
